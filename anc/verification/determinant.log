@@ -1,0 +1,227 @@
+{
+  "ok": true,
+  "scope": "Exact seed determinant, chain moments and finite Cauchy--Vandermonde factor tests; uniform proofs remain in the paper.",
+  "G4_scalar": "9/67228000000000",
+  "G4_primitive_coefficients_ascending": [
+    11390586457461030954563,
+    -124400937938521703661570,
+    509486272807705849983600,
+    -927382286191365446400000,
+    633018449291268096000000
+  ],
+  "G4_rational_coefficients_ascending": [
+    "102515278117149278591067/67228000000000",
+    "-111960844144669533295413/6722800000000",
+    "1637634448310483089233/24010000000",
+    "-3802132186462413/30625",
+    "519056673070464/6125"
+  ],
+  "chain_moment_tests": [
+    {
+      "d": -16,
+      "segment_plus_circle_moment": "-2690420/43046721",
+      "direct_chain_error": "8.75120106573e-76",
+      "zero_case": null
+    },
+    {
+      "d": -15,
+      "segment_plus_circle_moment": "-14348906/215233605",
+      "direct_chain_error": "3.50053814483e-76",
+      "zero_case": null
+    },
+    {
+      "d": -14,
+      "segment_plus_circle_moment": "-2391484/33480783",
+      "direct_chain_error": "1.40021209528e-76",
+      "zero_case": null
+    },
+    {
+      "d": -13,
+      "segment_plus_circle_moment": "-1594322/20726199",
+      "direct_chain_error": "5.60080621232e-77",
+      "zero_case": null
+    },
+    {
+      "d": -12,
+      "segment_plus_circle_moment": "-132860/1594323",
+      "direct_chain_error": "2.24032248492e-77",
+      "zero_case": null
+    },
+    {
+      "d": -11,
+      "segment_plus_circle_moment": "-177146/1948617",
+      "direct_chain_error": "8.96139536168e-78",
+      "zero_case": null
+    },
+    {
+      "d": -10,
+      "segment_plus_circle_moment": "-29524/295245",
+      "direct_chain_error": "3.58461085565e-78",
+      "zero_case": null
+    },
+    {
+      "d": -9,
+      "segment_plus_circle_moment": "-19682/177147",
+      "direct_chain_error": "1.43387069776e-78",
+      "zero_case": null
+    },
+    {
+      "d": -8,
+      "segment_plus_circle_moment": "-820/6561",
+      "direct_chain_error": "5.72441348318e-79",
+      "zero_case": null
+    },
+    {
+      "d": -7,
+      "segment_plus_circle_moment": "-2186/15309",
+      "direct_chain_error": "2.29029250317e-79",
+      "zero_case": null
+    },
+    {
+      "d": -6,
+      "segment_plus_circle_moment": "-364/2187",
+      "direct_chain_error": "9.17171221068e-80",
+      "zero_case": null
+    },
+    {
+      "d": -5,
+      "segment_plus_circle_moment": "-242/1215",
+      "direct_chain_error": "3.68976928014e-80",
+      "zero_case": null
+    },
+    {
+      "d": -4,
+      "segment_plus_circle_moment": "-20/81",
+      "direct_chain_error": "1.47590771205e-80",
+      "zero_case": null
+    },
+    {
+      "d": -3,
+      "segment_plus_circle_moment": "-26/81",
+      "direct_chain_error": "5.27109897162e-81",
+      "zero_case": null
+    },
+    {
+      "d": -2,
+      "segment_plus_circle_moment": "-4/9",
+      "direct_chain_error": "2.10843958865e-81",
+      "zero_case": null
+    },
+    {
+      "d": -1,
+      "segment_plus_circle_moment": "-2/3",
+      "direct_chain_error": "4.73929037284e-89",
+      "zero_case": null
+    },
+    {
+      "d": 0,
+      "segment_plus_circle_moment": "0",
+      "direct_chain_error": "1.34008546115e-89",
+      "zero_case": "-log(3)+log(3)=0"
+    },
+    {
+      "d": 1,
+      "segment_plus_circle_moment": "-2",
+      "direct_chain_error": "8.00394171482e-90",
+      "zero_case": null
+    },
+    {
+      "d": 2,
+      "segment_plus_circle_moment": "-4",
+      "direct_chain_error": "4.44030376286e-90",
+      "zero_case": null
+    },
+    {
+      "d": 3,
+      "segment_plus_circle_moment": "-26/3",
+      "direct_chain_error": "9.34964755887e-90",
+      "zero_case": null
+    },
+    {
+      "d": 4,
+      "segment_plus_circle_moment": "-20",
+      "direct_chain_error": "2.86678625339e-90",
+      "zero_case": null
+    },
+    {
+      "d": 5,
+      "segment_plus_circle_moment": "-242/5",
+      "direct_chain_error": "1.03563918634e-89",
+      "zero_case": null
+    },
+    {
+      "d": 6,
+      "segment_plus_circle_moment": "-364/3",
+      "direct_chain_error": "5.85105405644e-90",
+      "zero_case": null
+    },
+    {
+      "d": 7,
+      "segment_plus_circle_moment": "-2186/7",
+      "direct_chain_error": "2.26929265806e-90",
+      "zero_case": null
+    },
+    {
+      "d": 8,
+      "segment_plus_circle_moment": "-820",
+      "direct_chain_error": "3.53407262597e-91",
+      "zero_case": null
+    },
+    {
+      "d": 9,
+      "segment_plus_circle_moment": "-19682/9",
+      "direct_chain_error": "4.01708248112e-91",
+      "zero_case": null
+    },
+    {
+      "d": 10,
+      "segment_plus_circle_moment": "-29524/5",
+      "direct_chain_error": "3.77480540783e-92",
+      "zero_case": null
+    },
+    {
+      "d": 11,
+      "segment_plus_circle_moment": "-177146/11",
+      "direct_chain_error": "4.64424822289e-92",
+      "zero_case": null
+    },
+    {
+      "d": 12,
+      "segment_plus_circle_moment": "-132860/3",
+      "direct_chain_error": "1.53041253333e-92",
+      "zero_case": null
+    },
+    {
+      "d": 13,
+      "segment_plus_circle_moment": "-1594322/13",
+      "direct_chain_error": "6.16809808764e-93",
+      "zero_case": null
+    },
+    {
+      "d": 14,
+      "segment_plus_circle_moment": "-2391484/7",
+      "direct_chain_error": "3.40232507823e-93",
+      "zero_case": null
+    },
+    {
+      "d": 15,
+      "segment_plus_circle_moment": "-14348906/15",
+      "direct_chain_error": "1.62891766283e-93",
+      "zero_case": null
+    },
+    {
+      "d": 16,
+      "segment_plus_circle_moment": "-2690420",
+      "direct_chain_error": "3.69599776576e-95",
+      "zero_case": null
+    }
+  ],
+  "chain_quadrature_dps": 80,
+  "chain_quadrature_max_error": "8.75120106573e-76",
+  "factor_identity_tests": 9,
+  "tex_sha256": "e8c1384cbdddb4ca7c0d48a8a4a889e9cb50c1d40abe73f133dd82c4e2b37318",
+  "raw_tex_sha256": "c984b72adb5ddd7ea8d3bb32423fef784f6aa67f894ee596b4839560985ff228",
+  "seconds": 3.65927,
+  "python": "3.12.3",
+  "platform": "Linux-6.17.0-1020-oracle-aarch64-with-glibc2.39"
+}

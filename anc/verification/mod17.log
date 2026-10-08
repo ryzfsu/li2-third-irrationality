@@ -1,0 +1,38 @@
+{
+  "status": "PASS",
+  "scope": "Exact finite seed and direct 153x153 modular determinants; the all-t block identity is proved in the manuscript.",
+  "prime": 17,
+  "seed_polynomial_mod17": "11+5W^2+4W^4",
+  "seed_coefficients_ascending_mod17": [
+    11,
+    0,
+    5,
+    0,
+    4
+  ],
+  "tower_determinants": [
+    {
+      "W": 0,
+      "seed_value_mod17": 11,
+      "tower_det_mod17": 11
+    },
+    {
+      "W": 1,
+      "seed_value_mod17": 3,
+      "tower_det_mod17": 3
+    },
+    {
+      "W": 2,
+      "seed_value_mod17": 10,
+      "tower_det_mod17": 10
+    }
+  ],
+  "matrix_order": 153,
+  "coefficient_pair_checks": 23409,
+  "scaled_sequence_checks": 340,
+  "tex_sha256": "e8c1384cbdddb4ca7c0d48a8a4a889e9cb50c1d40abe73f133dd82c4e2b37318",
+  "raw_tex_sha256": "c984b72adb5ddd7ea8d3bb32423fef784f6aa67f894ee596b4839560985ff228",
+  "python": "3.12.3",
+  "platform": "Linux-6.17.0-1020-oracle-aarch64-with-glibc2.39",
+  "seconds": 0.106541
+}

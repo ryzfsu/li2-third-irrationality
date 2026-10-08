@@ -1,0 +1,91 @@
+{
+  "status": "PASS",
+  "scope": "Exact R=8 arrangement, slab table, tau bounds and alpha assembled from the printed TeX; uniform valuation proof remains in the manuscript.",
+  "raw_tex_sha256": "c984b72adb5ddd7ea8d3bb32423fef784f6aa67f894ee596b4839560985ff228",
+  "tex_sha256": "c984b72adb5ddd7ea8d3bb32423fef784f6aa67f894ee596b4839560985ff228",
+  "item4_arithmetic": {
+    "line_families": {
+      "L_lower(1/4)": [
+        0,
+        1,
+        2
+      ],
+      "K_lower(1/2)": [
+        0,
+        3,
+        4
+      ],
+      "K_upper(3/2)": [
+        1,
+        11,
+        11
+      ],
+      "L_upper(5/2)": [
+        2,
+        19,
+        18
+      ],
+      "W": [
+        1,
+        2,
+        2
+      ]
+    },
+    "line_families_match_printed": true,
+    "nlines": 39,
+    "nlines_is_39": true,
+    "cut_points_in_(1/R,5/4)": 75,
+    "slab_rows": 76,
+    "slabs_consecutive_from_1/R_to_5/4": true,
+    "slab_internal_endpoints_equal_cut_set": true,
+    "slab_rows_mismatching_definitions": [],
+    "every_slab_has_exactly_5_interior_lines": true,
+    "inner_integral": "580566971/177365760",
+    "inner_integral_matches_printed": true,
+    "rank_one_block_contribution": "-5/48",
+    "rank_one_block_is_-5/48": true,
+    "rank_one_closed_form": "-5/48",
+    "outer_integral": "45/32",
+    "outer_is_45/32": true,
+    "A": "902042411/177365760",
+    "A_matches_printed": true,
+    "lattice_sum_identity_checked_pairs": 787,
+    "lattice_sum_identity_ok": true,
+    "log3_bounds_float": [
+      1.0986122886681098,
+      1.0986122886681098,
+      1.0986122886681098
+    ],
+    "tau_lower": "3.8727242860996666403254",
+    "tau_upper": "3.8727242860996666403254",
+    "tau_printed": "3.872724286099666640",
+    "tau_printed_digits_consistent": true,
+    "tau_upper_lt_taubound_3.87273": true,
+    "pass": true,
+    "seconds": 55.46324014663696
+  },
+  "item5_alpha0": {
+    "q_minus": "-1298393/250000",
+    "K_x": "-120787/25000",
+    "K_v": "-237159/50000",
+    "K_z": "2159/50000",
+    "K_zcirc": "4283/100000",
+    "C0": "1647919/1000000",
+    "alpha0_exact": "484473/125000",
+    "alpha0_decimal": "3.87578400",
+    "alpha0_matches_printed_3.875784": true,
+    "three_halves_log3_upper_lt_C0": true,
+    "three_halves_log3_bounds": [
+      "1.647918433002",
+      "1.647918433002"
+    ],
+    "Kzcirc_lt_Kz": true,
+    "alpha0_gt_alphabound_3.8757": true,
+    "alpha0_minus_tau_lower": "0.003059713900",
+    "alpha0_minus_tau_upper": "0.003059713900",
+    "alpha0_minus_tau_gt_0.00305": true,
+    "taubound_lt_alphabound": true,
+    "pass": true
+  },
+  "seconds": 55.563261
+}

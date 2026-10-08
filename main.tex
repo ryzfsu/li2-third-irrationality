@@ -1,0 +1,1834 @@
+\documentclass{amsart}
+\usepackage{amssymb,mathtools,array,longtable}
+\usepackage[hidelinks]{hyperref}
+\setlength{\textwidth}{32pc}
+\setlength{\textheight}{50pc}
+\setlength{\oddsidemargin}{\dimexpr(\paperwidth-\textwidth)/2-1in\relax}
+\setlength{\evensidemargin}{\oddsidemargin}
+\setlength{\topmargin}{\dimexpr(\paperheight-\textheight-\headheight-\headsep)/2-1in\relax}
+\emergencystretch=1.5em
+\hypersetup{pdftitle={Irrationality of the dilogarithm at 1/3},pdfauthor={Ruiyi Zhang}}
+
+\makeatletter
+\def\LT@makecaption#1#2#3{\LT@mcol\LT@cols c{\hbox to\z@{\hss
+  \parbox[t]\textwidth{\normalsize\@tempcnta=64 \@makecaption{#2}{#3}}\hss}}}
+\makeatother
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{proposition}[lemma]{Proposition}
+\newtheorem{fact}{Fact}
+\numberwithin{equation}{section}
+\numberwithin{table}{section}
+
+\newcommand{\Li}{\operatorname{Li}}
+\newcommand{\Z}{\mathbb{Z}}
+\makeatletter
+\newcommand{\captionof}[1]{\def\@captype{#1}\caption}
+\makeatother
+
+% ---------------------------------------------------------------------------
+% Theorem-level numbers (generated from the certified data).
+\newcommand{\Rseam}{8}
+\newcommand{\nslabs}{76}
+\newcommand{\innervalue}{\frac{580566971}{177365760}}
+\newcommand{\Avalue}{\frac{902042411}{177365760}}
+\newcommand{\tauvalue}{3.872724286099666640}
+\newcommand{\taubound}{3.87273}
+\newcommand{\qminus}{-5.193572}
+\newcommand{\Kx}{-4.83148}
+\newcommand{\Kv}{-4.74318}
+\newcommand{\Kz}{0.04318}
+\newcommand{\Kzcirc}{0.04283}
+\newcommand{\alphazero}{3.875784}
+\newcommand{\alphabound}{3.8757}
+\newcommand{\marginvalue}{0.00305}
+\newcommand{\capmargin}{2\cdot10^{-6}}
+\newcommand{\Narcs}{32}
+\newcommand{\nleaves}{126464}
+\newcommand{\NE}{150}
+\newcommand{\NF}{90}
+\newcommand{\precE}{320}
+\newcommand{\precF}{192}
+\newcommand{\vzero}{0.00960735979838}
+% Line-family index ranges for the seam R=\Rseam (integer R>=5):
+%   k<R/4, k<R/2, k<3R/2, k<5R/2, w<R/4+1  <=>  k<=floor((R-1)/4), ...
+\newcommand{\fdiv}[2]{\the\numexpr(2*(#1)-(#2)+1)/(2*(#2))\relax}% floor(a/b), a>=0
+\newcommand{\kLlo}{\fdiv{\Rseam-1}{4}}
+\newcommand{\kKlo}{\fdiv{\Rseam-1}{2}}
+\newcommand{\kKhi}{\fdiv{3*\Rseam-1}{2}}
+\newcommand{\kLhi}{\fdiv{5*\Rseam-1}{2}}
+\newcommand{\wmax}{\fdiv{\Rseam+3}{4}}
+\newcommand{\nlines}{\the\numexpr 2+(\kLlo+1)+(\kKlo+1)+\kKhi+(\kLhi-1)+\wmax\relax}
+\newcommand{\Rfour}{\the\numexpr4*\Rseam\relax}
+% ---------------------------------------------------------------------------
+
+\begin{document}
+
+\title{Irrationality of the dilogarithm at $1/3$}
+\author{Ruiyi Zhang}
+\address{Independent Researcher, Columbia, Maryland, USA}
+\email{ryzfsu@gmail.com}
+\subjclass[2020]{Primary 11J72; Secondary 33B30}
+\keywords{dilogarithm, irrationality, interpolation determinant, logarithmic energy, interval arithmetic}
+
+\begin{abstract}
+We prove that $\operatorname{Li}_2(1/3)$ is irrational. Irrationality of
+$\operatorname{Li}_2(1/s)$ was known for integers $s\le-5$ and $s\ge6$ by
+work of Hata and of Rhin and Viola, and Prellberg recently proved it for
+$s=-4,5,-3$. We define polynomials $G_m(T)$ with rational coefficients by an
+interpolation determinant. The rank of this determinant modulo primes
+$p$ with $m/\Rseam<p<5m/4$ bounds the denominators of the coefficients. A
+concavity inequality for a logarithmic energy, combined with the inversion
+$v\mapsto3/v$, bounds $G_m(\operatorname{Li}_2(1/3))$. Interval
+arithmetic is used only for the energy and the potentials of a
+printed reference measure, on a uniform dyadic subdivision. The integral of the local rank function is a rational
+sum over $\nslabs$ printed affine pieces. The coefficients of $G_4$
+and the $9\times9$ determinant modulo $17$ are printed and can be checked by hand. A
+congruence modulo $17$ shows that $G_m(\xi)\ne0$ for every rational $\xi$
+and $m=4\cdot17^t$, $t$ large in terms of $\xi$.
+\end{abstract}
+
+\maketitle
+
+\section{Introduction}\label{sec:intro}
+
+For $|z|\le1$ let $\Li_2(z)=\sum_{k\ge1}z^k/k^2$.
+Hata \cite[Theorem~1.1]{Ha} proved that $\Li_2(1/s)$ is irrational
+for every integer $s\le-5$ and every $s\ge7$.
+Rhin and Viola settled $s=6$ by their permutation group method
+\cite[Section~6]{RV05}, and later treated negative arguments
+\cite[Theorem~2.1 and Section~4]{RV19}.
+Viola and Zudilin \cite{VZ} introduced a six-parameter family of double
+integrals for dilogarithmic values.
+In 2024 Calegari, Dimitrov and Tang
+\cite[Remark~2.8.2 and Section~15.2]{CDT} listed the integers still open:
+$s\in\{-4,-3,-2,2,3,4,5\}$.
+Prellberg's 2026 preprint \cite[Theorem~1.1]{Pr} proves the cases $s=-4,5,-3$.
+We prove the case $s=3$.
+Our linear forms are values of an interpolation determinant of size $9n$,
+in place of the double integrals of \cite{Ha,Pr,RV05,VZ}. The rank of this
+determinant modulo primes controls the denominators of its coefficients.
+
+\begin{theorem}\label{thm:main}
+The number $\Li_2(1/3)$ is irrational.
+\end{theorem}
+
+By Landen's identity \cite[(25.12.3)]{DLMF},
+$\Li_2(1/3)+\Li_2(-1/2)=-\frac12\log^2(3/2)$, and $\log(3/2)$ is
+transcendental by the Hermite--Lindemann theorem, a special case of
+\cite[Theorem~1.4]{Baker}. So Landen's identity does not reduce the case
+$s=3$ to the case $s=-2$.
+
+Put $\theta=\Li_2(1/3)$ and $m=4n$. Section~\ref{sec:determinant} defines
+$G_m(T)\in\mathbb Q[T]$ by an interpolation determinant.
+Sections~\ref{sec:divisor} and~\ref{sec:analytic} give
+\begin{gather}
+\deg G_m\le m\ \text{by Lemma~\ref{lem:moment-identity}},\qquad
+K_mG_m(T)\in\Z[T],
+\qquad K_m\in\mathbb Q_{>0},\notag
+\\
+\limsup_{\substack{m\to\infty\\4\mid m}}
+  \frac{\log K_m}{m^2}\le\tau<\taubound,\notag\\
+\log|G_m(\theta)|\le-\alphabound\,m^2+C\,m\log m
+\quad(m=4n\ge4).\label{eq:intro-rates}
+\end{gather}
+The exact value of $\tau$ is in \eqref{eq:tau}, and $\alphabound$ is a
+lower bound for the constant of \eqref{eq:alpha}. The finite constant $C$ of
+Lemma~\ref{lem:analytic-bound} depends only on the reference measure.
+Since $\taubound<\alphabound$, the quadratic exponent is negative.
+If $\theta=u/q_0$ with $q_0>0$, then $q_0^mK_mG_m(\theta)\in\Z$.
+Section~\ref{sec:nonvanishing} shows that it is nonzero for
+$m=4\cdot17^t$ and $t$ large, and \eqref{eq:intro-rates} shows that it tends
+to zero.
+
+The only numerical margin in the proof is $\alpha_0-\tau>0$. The size of
+$C$ is not used.
+Lemma~\ref{lem:reference-bound} is computer-assisted. It is proved by
+interval arithmetic on the reference measure of
+Tables~\ref{tab:reference-intervals} and~\ref{tab:reference-poisson}, over
+the uniform subdivision of Lemma~\ref{lem:leaves}. The integral
+\eqref{eq:inner-integral} is an exact sum over the $\nslabs$ affine pieces of
+Table~\ref{tab:slabs}, each determined by the explicit lines of
+Table~\ref{tab:line-families}.
+Tables~\ref{tab:g4-coefficients}, \ref{tab:line-families} and~\ref{tab:slabs}
+and \eqref{eq:g4-mod-matrix} can be checked by hand. Python scripts recheck
+Lemma~\ref{lem:reference-bound} and part of the remaining proof
+(Appendix~\ref{app:ver}). Apart from this lemma, the proof is complete without them.
+
+The proof uses three classical inputs.
+
+\begin{fact}[prime number theorem {\cite[Theorems~6 and~420, \S\S1.8 and~22.4]{HW}}]\label{fact:pnt}
+$\theta_{\rm Ch}(y)=\sum_{p\le y}\log p$ satisfies $\theta_{\rm Ch}(y)/y\to1$
+as $y\to\infty$.
+\end{fact}
+Only this qualitative form is used.
+
+\begin{fact}[{\cite[Lemma~I.1.8]{ST}}]\label{fact:energy}
+If $\sigma$ is a real compactly supported signed measure of total mass zero
+with $\iint|\log|u-w||\,d|\sigma|(u)\,d|\sigma|(w)<\infty$, then
+$\iint\log|u-w|\,d\sigma(u)\,d\sigma(w)\le0$.
+\end{fact}
+A short proof is given in Appendix~\ref{app:energy}.
+
+\begin{fact}[Cauchy--Vandermonde {\cite[Theorem~25]{Krat}, \cite[Section~2]{HK}}]\label{fact:cv}
+For $s=(s_1,\ldots,s_m)$, $v=(v_1,\ldots,v_L)$ and $h=L-m\ge0$,
+\[
+\det\begin{pmatrix}
+((s_{i'}+v_b)^{-1})_{1\le i'\le m,\,1\le b\le L}\\(v_b^{\ell-1})_{1\le\ell\le h,\,1\le b\le L}
+\end{pmatrix}
+=\frac{\Delta(s)\Delta(v)}{\prod_{i',b}(s_{i'}+v_b)},
+\qquad \Delta(u)=\prod_{i<j}(u_j-u_i).
+\]
+\end{fact}
+A proof, including the sign, is given in the proof of
+Lemma~\ref{lem:integral-identity}.
+
+The use of AI tools is described at the end of the paper.
+
+\section{The determinant}\label{sec:determinant}
+
+Put $a=3$. For $n\ge1$ let
+\begin{equation*}
+\begin{gathered}
+m=4n,\qquad \sigma=k=h=n,\qquad L=m+h,\\
+I=\{\sigma+k,\ldots,\sigma+k+m-1\},\quad
+J=\{\sigma,\ldots,\sigma+2m+h-1\},\quad
+\Lambda=\{1,\ldots,h\},
+\end{gathered}
+\end{equation*}
+all ordered increasingly. For $j\ge0$ put
+\[
+t_j=\sum_{u=1}^{j}\frac{a^{j-u}}u,\qquad
+b_j=\sum_{u=1}^{j}\frac{a^{j-u}}{u^2};\qquad t_0=b_0=0.
+\]
+For $i\in I$, $j\in J$ and $\ell\in\Lambda$ let
+\begin{equation*}
+\begin{gathered}
+C_{ij}=\begin{cases}(a^i-a^j)/(j-i),&i\ne j,\\0,&i=j,\end{cases}
+\quad
+B_{ij}=\begin{cases}(t_i-t_j)/(j-i),&i\ne j,\\b_i,&i=j,\end{cases}\\
+A_{ij}=a^i\delta_{ij},\qquad V_{\ell j}=\frac1{j+\ell},\qquad
+M_{ij}=\int_0^1\!\int_0^1\frac{x^iy^j}{xy-3}\,dx\,dy,
+\end{gathered}
+\end{equation*}
+and put
+\begin{equation}\label{eq:determinant}
+G_m(T)=\det\begin{pmatrix}C\\B-TA\\V\end{pmatrix},
+\end{equation}
+a determinant of size $2m+h=9n$. For an indeterminate $a$ the same formulas
+define
+\[
+G_m(T;a)=\det\begin{pmatrix}C(a)\\B(a)-TA(a)\\V\end{pmatrix}
+\in\mathbb Q[a,T];\qquad G_m(T)=G_m(T;3).
+\]
+
+\begin{lemma}\label{lem:moment-identity}
+One has $G_m\in\mathbb Q[T]$, $\deg G_m\le m$, and
+\begin{equation}\label{eq:moment-identity}
+M=B+\log(2/3)\,C-\theta A,\qquad
+G_m(\theta)=\det\begin{pmatrix}C\\M\\V\end{pmatrix}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Write $\lambda=\log(2/3)$ and
+\[
+\mathfrak m_j=\int_0^1\frac{u^j}{u-3}\,du,\qquad
+\mathfrak n_j=\int_0^1\frac{u^j\log(1/u)}{u-3}\,du.
+\]
+Polynomial division and the geometric series give
+\begin{equation*}
+\begin{gathered}
+\mathfrak m_0=\lambda,\quad \mathfrak n_0=-\theta,\qquad
+\mathfrak m_j=a\mathfrak m_{j-1}+\frac1j,\quad
+\mathfrak n_j=a\mathfrak n_{j-1}+\frac1{j^2}\quad(j\ge1),\\
+\mathfrak m_j=a^j\lambda+t_j,\qquad \mathfrak n_j=b_j-a^j\theta.
+\end{gathered}
+\end{equation*}
+The substitution $u=xy$ gives
+\[
+M_{ij}=\frac{\mathfrak m_i-\mathfrak m_j}{j-i}\quad(i\ne j),\qquad M_{ii}=\mathfrak n_i.
+\]
+Hence the first identity in \eqref{eq:moment-identity}. Add $\lambda$
+times each $C$ row to the corresponding row of $B-\theta A$. Only the $m$
+middle rows depend on $T$, and their coefficients are rational.
+\end{proof}
+
+Put $r=2/5$ and $\gamma(\vartheta)=re^{i\vartheta}$ $(0\le\vartheta\le2\pi)$.
+Let $[3,1]$ be the segment from $3$ to $1$, and let
+\begin{equation*}
+\Gamma=[3,1]+c_\Gamma\gamma,\qquad c_\Gamma=\frac{\log3}{2\pi i},
+\end{equation*}
+a linear combination of paths with complex coefficients. For every integer $d$,
+\begin{equation}\label{eq:laurent-moments}
+\int_\Gamma z^{d-1}\,dz=
+\begin{cases}
+(1-a^d)/d,&d\ne0,\\
+0,&d=0.
+\end{cases}
+\end{equation}
+For $d\ne0$ integrate $z^d/d$ on each path. For $d=0$ the segment
+gives $-\log3$ and the circle gives $2\pi ic_\Gamma=\log3$. The total variation is
+\begin{equation}\label{eq:chain-variation}
+T_r=2+r\log3=2.43944\ldots<3.
+\end{equation}
+
+With $\Delta$ as in Fact~\ref{fact:cv}, use variables
+$x=(x_1,\ldots,x_m)$, $v=(v_1,\ldots,v_L)$ and $z=(z_1,\ldots,z_m)$.
+
+\begin{lemma}\label{lem:integral-identity}
+With product differentials $dx\,dv\,dz$,
+\begin{equation}\label{eq:integral-identity}
+G_m(\theta)=
+\frac{3^{3m^2/2-m}}{(m!)^2L!}
+\int_{[0,1]^m}\int_{[0,1]^L}\int_{\Gamma^m}
+ \Phi(x,v,z)\,dz\,dv\,dx,
+\end{equation}
+where
+\begin{equation*}
+\Phi(x,v,z)=
+\frac{\Delta(x)^2\Delta(v)^2\Delta(z)^2
+\displaystyle\prod_{d=1}^{m}\prod_{b=1}^{L}(z_d-v_b)
+\displaystyle\prod_{i'=1}^{m}x_{i'}^{\sigma+k+h}
+\prod_{b=1}^{L}v_b^\sigma\prod_{d=1}^{m}z_d^{-m-k}}
+{\displaystyle\prod_{i'=1}^{m}\prod_{b=1}^{L}(3-x_{i'}v_b)}.
+\end{equation*}
+\end{lemma}
+
+\begin{proof}
+By \eqref{eq:laurent-moments},
+$C_{ij}=a^i\int_\Gamma z^{j-i-1}\,dz$.
+Put $f_i(v)=\int_0^1x^i/(xv-3)\,dx$. Then
+\[
+M_{ij}=\int_0^1f_i(v)v^j\,dv,\qquad
+V_{\ell j}=\int_0^1v^{\ell-1}v^j\,dv.
+\]
+Set $e_\Delta=m(m-1)/2$ and
+$\mathbf w=(z_1,\ldots,z_m,v_1,\ldots,v_L)$.
+Multilinearity in the rows and antisymmetrization, applied to the $L$ rows
+$[M;V]$, then to the $m$ rows $C$, and then to the $m$ functions $f_i$, give
+\begin{equation*}
+G_m(\theta)=\frac1{(m!)^2L!}
+\int_{[0,1]^m\times[0,1]^L\times\Gamma^m}
+D_zD_{zv}D_xD_{xv}\,dx\,dv\,dz,
+\end{equation*}
+where
+\begin{align*}
+D_z&=\det(a^iz_d^{-i-1})_{i\in I,\,1\le d\le m}
+ =(-1)^{e_\Delta}a^{m(\sigma+k)+e_\Delta}\Delta(z)\prod_dz_d^{-\sigma-k-m},\\
+D_{zv}&=\det(\mathbf w_b^j)_{1\le b\le 2m+h,\,j\in J}
+=(-1)^{mL}\Delta(z)\Delta(v)
+  \prod_dz_d^\sigma\prod_bv_b^\sigma\prod_{d,b}(z_d-v_b),\\
+D_x&=\det(x_{i'}^i)_{i\in I,\,1\le i'\le m}
+ =\Delta(x)\prod_{i'}x_{i'}^{\sigma+k},\\
+D_{xv}&=\det\begin{pmatrix}
+((x_{i'}v_b-3)^{-1})_{1\le i'\le m,\,1\le b\le L}\\
+(v_b^{\ell-1})_{1\le\ell\le h,\,1\le b\le L}
+\end{pmatrix}
+ =\frac{(-1)^{mL}3^{e_\Delta}\Delta(x)\Delta(v)\prod_{i'}x_{i'}^h}
+{\prod_{i',b}(3-x_{i'}v_b)}.
+\end{align*}
+The last equality follows from the Cauchy--Vandermonde identity. Explicitly,
+for $s_{i'}=-3/x_{i'}$,
+\[
+\det\begin{pmatrix}((x_{i'}v_b-3)^{-1})_{i',b}\\(v_b^{\ell-1})_{\ell,b}\end{pmatrix}
+=\prod_{i'}x_{i'}^{-1}
+\det\begin{pmatrix}((s_{i'}+v_b)^{-1})_{i',b}\\(v_b^{\ell-1})_{\ell,b}\end{pmatrix},
+\]
+and $\Delta(s)=3^{e_\Delta}\Delta(x)\prod_{i'}x_{i'}^{1-m}$,
+$\prod_{i',b}(s_{i'}+v_b)=(-1)^{mL}\prod_{i',b}(3-x_{i'}v_b)\prod_{i'}x_{i'}^{-L}$.
+Fact~\ref{fact:cv} and this row scaling give the formula for $D_{xv}$.
+Continuity covers $x_{i'}=0$.
+
+We prove Fact~\ref{fact:cv} as an identity of rational
+functions, with $s_{i'},v_b$ independent indeterminates. We use induction on
+$m$, for all $h\ge0$ at once. The case $m=0$ is the Vandermonde identity.
+Let $m\ge1$, let $v'=(v_1,\ldots,v_{L-1})$, and let $\widehat s_{i'}$
+denote $s$ with $s_{i'}$ omitted. As a function of $v_L$, expansion along the
+last column writes the determinant as
+$\sum_{i'}(-1)^{i'+L}M_{i'}/(s_{i'}+v_L)$ plus a polynomial of degree at most
+$h-1$, where $M_{i'}$ is the minor without row $i'$ and column $L$. The right
+side is a polynomial of degree $L-1=m+h-1$ in $v_L$ divided by
+$\prod_{i'}(s_{i'}+v_L)$, so it has the same form. By the induction
+hypothesis for $(\widehat s_{i'},v')$, $M_{i'}$ is the right side of the
+fact for $(\widehat s_{i'},v')$. We have
+$\Delta(s)=(-1)^{i'-1}\Delta(\widehat s_{i'})\prod_{j\ne i'}(s_j-s_{i'})$,
+and $\Delta(v)=(-1)^{L-1}\Delta(v')\prod_{b<L}(s_{i'}+v_b)$ at
+$v_L=-s_{i'}$. Hence, after the
+factors $s_j+v_L=s_j-s_{i'}$ $(j\ne i')$ and $s_{i'}+v_b$ $(b<L)$ cancel,
+the residue of the right side at $v_L=-s_{i'}$ is
+\[
+ (-1)^{i'+L}
+ \frac{\Delta(\widehat s_{i'})\Delta(v')}
+ {\prod_{j\ne i'}\prod_{b<L}(s_j+v_b)}=(-1)^{i'+L}M_{i'}.
+\]
+So the residues agree, and the difference of the two sides is a polynomial
+in $v_L$ of degree at most $h-1$, zero if $h=0$. It vanishes at the
+$L-1\ge h$ points $v_L=v_b$, $b<L$, where the determinant has two equal
+columns and $\Delta(v)=0$. Hence it is zero.
+
+The product of the four factors is
+$(-1)^{e_\Delta}a^{m(\sigma+k)+2e_\Delta}\Phi$. Since
+$m=4n$, $e_\Delta=2n(4n-1)$ is even and
+$m(\sigma+k)+2e_\Delta=3m^2/2-m$. All integrals converge absolutely:
+$3-xv\ge2$ on $[0,1]^2$, $|z|\ge r$ on $\Gamma$, and $\Gamma$ has finite
+variation.
+\end{proof}
+
+An exact calculation gives
+\begin{equation}\label{eq:g4-polynomial}
+G_4(T)=\frac{9}{67228000000000}\sum_{j=0}^4q_jT^j,\qquad
+67228000000000=2^{11}5^97^5,
+\end{equation}
+with the coefficients in Table~\ref{tab:g4-coefficients}.
+\begin{table}[!ht]
+\centering
+\caption{The integer coefficients in \eqref{eq:g4-polynomial}.}
+\label{tab:g4-coefficients}
+\begin{tabular}{cr}
+$j$&$q_j$\\\hline
+$0$ & $11390586457461030954563$\\
+$1$ & $-124400937938521703661570$\\
+$2$ & $509486272807705849983600$\\
+$3$ & $-927382286191365446400000$\\
+$4$ & $633018449291268096000000$\\
+\end{tabular}
+\end{table}
+
+\section{The divisor}\label{sec:divisor}
+Put
+\[
+N_{\mathrm{den}}=10n-1,\qquad U=11n-1,\qquad d_\ell=\operatorname{lcm}(1,\ldots,\ell),
+ \qquad \mathcal D_m=d_{N_{\mathrm{den}}}^{3m}d_U^n.
+\]
+For $F\in\mathbb Q[T]$ let $v_p(F)=\min_j v_p([T^j]F)$. From now on $k$ is
+a running index, and the parameter $k$ of Section~\ref{sec:determinant} equals
+$n$. Fix the seam $R=\Rseam$. Primes $p\le m/R$ are cleared by
+$\mathcal D_m$ alone. For primes $m/R<p<5m/4$ we use the rank bound of
+Lemma~\ref{lem:residue-bound}.
+
+\begin{lemma}\label{lem:common-denominator}
+For an indeterminate $a$,
+\begin{equation}\label{eq:lcm-clearer}
+ P_m(a,T):=\mathcal D_mG_m(T;a)\in\Z[a,T].
+\end{equation}
+\end{lemma}
+\begin{proof}
+The denominators of a $C$ entry divide $d_{N_{\mathrm{den}}}$. An off-diagonal $B$ entry is
+a difference of harmonic sums divided by $j-i$, so its denominator divides
+$d_{N_{\mathrm{den}}}^2$, and so does that of $b_i$. The entries $Ta^i$ are
+integral. The denominators of a $V$ entry divide $d_U$.
+\end{proof}
+
+\subsection{Residue classes}
+For $\rho>0$ and $0\le x<\rho$ let
+\begin{align}\label{eq:residue-sets}
+ K(x,\rho)&=\{k\ge0:1/2\le x+k\rho<3/2\},\\
+ \mathcal L(x,\rho)&=\{l\ge0:1/4\le x+l\rho<5/2\},\notag
+\\
+ W(x,\rho)&=\{w\ge1:0<w\rho-x\le1/4\},\notag
+\end{align}
+and
+\begin{equation}\label{eq:residue-rank}
+ \mathfrak r(x,\rho)=\min(2|K|+|W|,|\mathcal L|)
+       -\mathbf1_{\{K=\{0\},\,\mathcal L=\{0,1\},\,W=\varnothing\}},
+ \qquad \mathfrak c(\rho)=1+\int_0^\rho \mathfrak r(x,\rho)\,dx.
+\end{equation}
+
+\begin{lemma}\label{lem:residue-bound}
+Let $p$ be a prime with $p^2>U$, so that $p\ge5$, and let $a=3$. Then
+\begin{equation}\label{eq:inner-valuation}
+ v_p(G_m)\ge-m-\sum_{u=0}^{p-1}\mathfrak r(u/m,p/m)=-m\mathfrak c(p/m).
+\end{equation}
+\end{lemma}
+\begin{proof}
+Multiply the whole rows of $C$, $B-TA$ and $V$ by $p$, $p^2$ and $p$. The
+resulting matrix $S_p(T)$ has $\det S_p(T)=p^{3m+n}G_m(T)$ and entries in
+$\Z_{(p)}[T]$, and $S_p(T)\equiv S_p(0)\pmod p$ because $p^2TA\equiv0$.
+Write $i=u+kp$, $j=u+lp$ with
+$0\le u<p$. Only the harmonic terms with $p$ in the denominator survive
+modulo $p$. Their quotients are $p$-units because all indices are less than
+$p^2$, and $a^p\equiv a\pmod p$, so
+\[
+ pt_{u+kp}\equiv a^ut_k,\qquad p^2b_{u+kp}\equiv a^ub_k\pmod p.
+\]
+The scaled $C$ and $B$ entries vanish modulo $p$ between distinct residue
+classes modulo $p$. For a cross-class $B$ entry, the numerator is $p$-integral after
+the row scaling and the remaining factor $p/(j-i)$ is zero modulo $p$.
+Within a class, for $j\ne i$, $j-i=p(l-k)$ with $0<|l-k|<p$, so the
+quotient denominator is a unit. Diagonal entries are given by the separate
+cases $i=j$ in the definitions of $C$ and $B$. Since $a^{u+kp}\equiv a^{u+k}\pmod p$, for $i\ne j$
+\[
+ pC_{ij}=\frac{a^i-a^j}{l-k}\equiv a^u\frac{a^k-a^l}{l-k}=a^uC_{kl},\qquad
+ p^2B_{ij}=\frac{pt_i-pt_j}{l-k}\equiv a^uB_{kl}\pmod p.
+\]
+A $V$ row reduces to zero unless $\ell+u=pw$. Then its
+entry is $1/(l+w)$, without the factor $a^u$, and $l+w=(j+\ell)/p<p$. So,
+after permutations, the reduction has blocks
+with $2|K|+|W|$ rows and $|\mathcal L|$ columns, where $(x,\rho)=(u/m,p/m)$.
+
+For $K=\{0\}$, $\mathcal L=\{0,1\}$, $W=\varnothing$ the block, with its rows
+divided by the unit $a^u$, is
+\begin{equation}\label{eq:rank-one-block}
+ \begin{pmatrix}0&1-a\\0&-1\end{pmatrix}
+ =\begin{pmatrix}0&-2\\0&-1\end{pmatrix},
+\end{equation}
+of rank one for every $p$. Every other block has rank at most the
+minimum of its dimensions. So the rank of $S_p(0)$ modulo $p$ is at most
+$\mathrm{rk}_p=\sum_u \mathfrak r(u/m,p/m)$.
+The matrix has $2m+n$ rows. Row operations over $\Z_{(p)}$, independent of
+$T$, make its last $2m+n-\mathrm{rk}_p$ rows divisible by $p$ coefficientwise.
+Subtracting the scaling exponent $3m+n$ gives the first inequality in
+\eqref{eq:inner-valuation}.
+
+Every boundary in \eqref{eq:residue-sets} has the form $x=c_0+b\rho$ with
+$4c_0,b\in\Z$. At $\rho=p/m$, $m=4n$, it lies in $m^{-1}\Z$. The $K,\mathcal L$
+conditions are closed on the left and open on the right in $x$, and the
+$W$ condition is $w\rho-1/4\le x<w\rho$. So $\mathfrak r$ is constant on
+each $[u/m,(u+1)/m)$, and
+\begin{equation}\label{eq:lattice-sum}
+ \sum_{u=0}^{p-1}\mathfrak r(u/m,p/m)=m\int_0^{p/m}\mathfrak r(x,p/m)\,dx.\qedhere
+\end{equation}
+\end{proof}
+
+The lines that bound the sets \eqref{eq:residue-sets} are
+$x=z_0-k\rho$ $(z_0\in\{1/4,1/2,3/2,5/2\},\ k\ge0)$ and $x=w\rho-1/4$
+$(w\ge1)$. The first meets the strip $0<x<\rho$ exactly for
+$z_0/(k+1)<\rho<z_0/k$, the second exactly for $1/(4w)<\rho<1/(4(w-1))$. For
+$k=0$ and for $w=1$ the upper endpoint is $+\infty$. So $x=z_0-k\rho$ meets
+the strip for some $\rho\in(1/R,5/4)$ if and only if $4z_0/5-1<k<z_0R$, and
+$x=w\rho-1/4$ if and only if $1\le w<R/4+1$. Hence, for $1/R<\rho<5/4$, the
+sets \eqref{eq:residue-sets} change only on the $\nlines$ lines
+\begin{equation}\label{eq:subdivision-lines}
+\begin{gathered}
+ x=0,\quad x=\rho,\quad x=w\rho-1/4\quad(1\le w\le\wmax),\\
+ x=1/4-k\rho\quad(0\le k\le\kLlo),\quad x=1/2-k\rho\quad(0\le k\le\kKlo),\\
+ x=3/2-k\rho\quad(1\le k\le\kKhi),\quad x=5/2-k\rho\quad(2\le k\le\kLhi).
+\end{gathered}
+\end{equation}
+Cut $(1/R,5/4)$ at the finitely many values of $\rho$ where two of these
+lines meet in $0\le x\le\rho$, and let $\mathcal C$ be the set of these cut
+points. For $\rho\in(1/R,5/4)\setminus\mathcal C$ and each $z_0$ exactly one
+line $x=z_0-k\rho$ meets $0<x<\rho$, namely $k=\lfloor z_0/\rho\rfloor$, and
+exactly one line $x=w\rho-1/4$ does, namely $w=\lfloor1/(4\rho)\rfloor+1$.
+These indices lie in the ranges of \eqref{eq:subdivision-lines}. So on each
+open interval of $(1/R,5/4)\setminus\mathcal C$ the order of the lines in
+$0<x<\rho$ is fixed, exactly five lines lie there, the sets
+\eqref{eq:residue-sets} are constant on each of the six $x$-intervals
+between consecutive lines, and $\mathfrak c$ is affine.
+A change of $\rho$ by $\delta$ moves each of these lines by $O(|\delta|)$ and
+the endpoint of the integral by $\delta$. So the sets
+\eqref{eq:residue-sets} change only on strips of total length $O(|\delta|)$.
+As $\mathfrak r$ is bounded,
+$|\mathfrak c(\rho)-\mathfrak c(\rho')|=O(|\rho-\rho'|)$, and
+$\mathfrak c$ is continuous. Table~\ref{tab:slabs}
+(Appendix~\ref{app:arithmetic}) lists $\nslabs$ consecutive intervals with
+union $(1/R,5/4)$ up to finitely many points, and the affine function
+$\mathfrak c$ on each. Each row follows from
+\eqref{eq:residue-sets}--\eqref{eq:residue-rank} and
+\eqref{eq:subdivision-lines}. The affine functions of adjacent rows agree at
+all $75$ internal joins. Summation of the rows gives
+\begin{equation}\label{eq:inner-integral}
+ \int_{1/R}^{5/4}\mathfrak c(\rho)\,d\rho=\innervalue.
+\end{equation}
+The configuration $K=\{0\}$, $\mathcal L=\{0,1\}$, $W=\varnothing$ of
+\eqref{eq:rank-one-block} means $\max(1/2,3/2-\rho)\le x<3/2$,
+$\max(1/4,5/2-2\rho)\le x<5/2-\rho$ and $x<\rho-1/4$. For $\rho<5/4$ this is
+$\max(1/2,3/2-\rho,5/2-2\rho)\le x<\rho-1/4$, which is nonempty only for
+$\rho>11/12$. So it occupies
+$5/2-2\rho\le x<\rho-1/4$ for $11/12<\rho<1$, and
+$1/2\le x<\rho-1/4$ for $1\le\rho<5/4$. As $1/R<11/12$, its contribution to
+\eqref{eq:inner-integral} is
+\begin{equation*}
+ -\int_{11/12}^{1}(3\rho-11/4)\,d\rho
+ -\int_1^{5/4}(\rho-3/4)\,d\rho=-\frac5{48}.
+\end{equation*}
+
+\subsection{Larger primes}
+For $p>5n$ define row potentials $\lambda_C=0$, $\lambda_B(i)$,
+$\lambda_V(\ell)$ and column potentials $\chi(j)$ by
+\begin{equation*}
+\begin{aligned}
+5n<p<6n:&\quad
+ (\lambda_B,\lambda_V,\chi)
+ =(1+\mathbf1_{i\ge p},\,1,\,\mathbf1_{j\ge p+2n}),\\
+6n\le p<8n:&\quad
+ (\lambda_B,\lambda_V,\chi)
+ =(\mathbf1_{i+p<10n},\,1,\,\mathbf1_{j\ge p}),\\
+8n\le p<10n:&\quad
+ (\lambda_B,\lambda_V,\chi)=(0,\,1,\,\mathbf1_{j\ge p}),\\
+10n\le p\le11n-1:&\quad
+ (\lambda_B,\lambda_V,\chi)=(0,\,\mathbf1_{p-\ell\in J},\,0),
+\end{aligned}
+\end{equation*}
+and put
+\begin{equation*}
+ E_p^{\rm out}=
+ \begin{cases}
+ 19n-2p,&5n<p<8n,\\
+ 11n-p,&8n\le p\le U.
+ \end{cases}
+\end{equation*}
+
+\begin{lemma}\label{lem:outer-bound}
+For a prime $5n<p\le U$ one has $v_p(G_m)\ge-E_p^{\rm out}$.
+\end{lemma}
+\begin{proof}
+A $C$ entry has a pole only at $j=i+p$, of order at most one. A $B$ entry
+has pole order at most
+\[
+ \mathbf1_{\max(i,j)\ge p}
+ +\mathbf1_{\{\max(i,j)\ge p,\ i\equiv j\pmod p\}},
+\]
+including the double pole of $b_i$ for $i\ge p$. A $V$ entry has a simple
+pole when $p\mid j+\ell$. As $p^2>U$, there are no higher powers.
+
+In the first range every $B$ row has potential at least one, and two if
+$i\ge p$. A collision $j=i+p$ has $j\ge p+2n$, and its column gives the
+second unit. In the second range all $i<p$. The columns $j\ge p$ cover the
+simple $B$ poles and the $C$ poles. A collision needs $i+p<10n$, and its
+row gives the other unit. In the third range $i<p$ and $i+p\ge10n$, so
+only simple $B$ poles remain. In these three ranges every $V$ row has
+potential one, which covers $j+\ell=p$ and $j+\ell=2p$. In the fourth range
+$i,j<p$, only $V$ poles remain, and the rows with $\lambda_V=1$ are those
+containing one. So $\lambda_{\rm row}+\chi_j$ dominates every pole order.
+Multiply each row and column by $p$ to the power of its potential. The
+potentials add up to $(10n-p)+n+(8n-p)$, $(8n-p)+n+(10n-p)$, $n+(10n-p)$
+and $11n-p$ in the four ranges.
+\end{proof}
+
+\subsection{The factor at three}
+\begin{lemma}\label{lem:formal-divisor}
+Let $N_m=\lceil53m^2/48\rceil-m$. Then
+\begin{equation}\label{eq:formal-divisor}
+ P_m(a,T)\in a^{N_m}\Z[a,T].
+\end{equation}
+In particular $v_3(G_m)\ge N_m-v_3(\mathcal D_m)$.
+\end{lemma}
+\begin{proof}
+Work in $\mathbb Q[[a]][T]$. Write
+\[
+ S_j(a)=\sum_{u\ge1}\frac{a^u}{u^j},\qquad
+ \mathsf v_k(i)=\begin{cases}(i-k)^{-1},&i\ne k,\\0,&i=k,\end{cases}
+ \quad \mathsf z_k(i)=\mathsf v_k(i)^2,\quad \mathsf e_k(i)=\mathbf1_{i=k}.
+\]
+Subtract $S_1(a)$ times each $C$ row from the paired row of $B-TA$.
+Comparison of coefficients, including the diagonal, gives
+\begin{equation}\label{eq:formal-expansion}
+\begin{aligned}
+\begin{pmatrix}C\\B-TA-S_1C\end{pmatrix}
+&=\sum_{k\ge0}a^k
+ \begin{pmatrix}\mathsf v_k(I)\\-\mathsf z_k(I)-(T+S_2)\mathsf e_k(I)\end{pmatrix}\mathsf e_k(J)^t\\
+&\quad+\sum_{k\ge0}a^k\begin{pmatrix}\mathsf e_k(I)\\\mathsf v_k(I)\end{pmatrix}\mathsf v_k(J)^t
+ +\sum_{k\ge0}a^k\begin{pmatrix}0\\-\mathsf e_k(I)\end{pmatrix}\mathsf z_k(J)^t.
+\end{aligned}
+\end{equation}
+For example, the off-diagonal lower entry is
+$\sum_{k\ge0}a^k\mathsf v_k(i)\mathsf v_k(j)-(a^i+a^j)/(i-j)^2$, and the diagonal entry is
+$\sum_{k\ge0}a^k\mathsf v_k(i)^2-a^i(T+S_2)=b_i-Ta^i$. Each coefficient of $a$
+involves finitely many terms.
+
+Expand along the $n$ rows of $V$, and expand each remaining $2m$-row minor
+by the rank-one summands in \eqref{eq:formal-expansion}. A nonzero term
+selects $2m=8n$ distinct rank-one summands. At weight $k$ at most
+\begin{equation*}
+ c_k=1+\mathbf1_{k\in J}+\mathbf1_{k\in I}
+\end{equation*}
+occur: the first summand needs $k\in J$, the third needs $k\in I$. All
+entries, including $T+S_2$, have nonnegative order in $a$. So every term
+has order at least the sum of the $8n$ smallest available weights.
+The infinite expansion is used coefficientwise. Modulo
+$a^{N_m+1}$ only finitely many $k$ occur, so Cauchy--Binet applies to a
+finite truncation.
+
+There is one weight at each $0\le k<n$, two at each $n\le k<2n$, and three
+at each $2n\le k<6n$. Write $5n=3d+\epsilon'$, $0\le\epsilon'<3$. The minimum available-weight sum is
+\begin{align*}
+ \sum_{k=0}^{n-1}k+2\sum_{k=n}^{2n-1}k
+ +3\sum_{k=2n}^{2n+d-1}k+\epsilon'(2n+d)
+ &=\frac{53n^2}{3}-4n+\frac{\epsilon'(3-\epsilon')}6\\
+ &=\left\lceil\frac{53n^2}{3}\right\rceil-4n=N_m.
+\end{align*}
+The minors of $V$ do not depend on $a,T$, so $a^{N_m}\mid G_m(T;a)$ in
+$\mathbb Q[a,T]$. By \eqref{eq:lcm-clearer}, division by the monic
+$a^{N_m}$ gives \eqref{eq:formal-divisor}. Specialization at $a=3$ gives
+the last statement.
+\end{proof}
+
+\subsection{Summation over primes}
+Put $e_0(p)=3m\lfloor\log_pN_{\mathrm{den}}\rfloor+n\lfloor\log_pU\rfloor=v_p(\mathcal D_m)$.
+With the first applicable line taking precedence, let
+\begin{equation}\label{eq:prime-exponents}
+ E_p=\begin{cases}
+ e_0(3)-N_m,&p=3,\\
+ e_0(p),&p\le m/R\ \text{or}\ p^2\le U\ \text{or}\ p=5m/4,\\
+ m\mathfrak c(p/m),&m/R<p<5m/4,\\
+ E_p^{\rm out},&5m/4<p\le U,\\
+ 0,&p>U,
+ \end{cases}
+ \qquad
+ K_m=\prod_{p}p^{E_p}\in\mathbb Q_{>0}.
+\end{equation}
+
+\begin{lemma}\label{lem:integerization}
+One has $K_mG_m(T)\in\Z[T]$ for every $m=4n$, and
+$\log K_m\le\tau m^2+o(m^2)$ as $m\to\infty$, where
+\begin{equation}\label{eq:tau}
+\begin{gathered}
+ A=\frac{13}{4R}+\int_{1/R}^{5/4}\mathfrak c(\rho)\,d\rho+\frac{45}{32}
+  =\Avalue,\\
+ \tau=A-\frac{53}{48}\log3=\tauvalue\ldots,
+\end{gathered}
+\end{equation}
+so that $\alpha_0-\tau>\marginvalue$ for the constant $\alpha_0$ defined after
+\eqref{eq:alpha} in Section~\ref{sec:analytic}.
+\end{lemma}
+\begin{proof}
+By \eqref{eq:lattice-sum}, $m\mathfrak c(p/m)\in\Z$. Lemmas~\ref{lem:common-denominator},
+\ref{lem:residue-bound}, \ref{lem:outer-bound} and~\ref{lem:formal-divisor}
+give $v_p(K_mG_m)\ge0$ for every $p$. The exponent at three may be
+negative. Since $\mathfrak r\le|\mathcal L|$ and
+$\sum_u|\mathcal L(u/m,p/m)|=|J|=9n$, every inner exponent is at most
+$13n$.
+
+If $m\ge11R^2/4$, then $p>m/R$ implies $p^2>m^2/R^2\ge11m/4>U$. Put
+\[
+ \eta_{\rm PNT}(X)=\sup_{y\ge X}|\theta_{\rm Ch}(y)/y-1|.
+\]
+By Fact~\ref{fact:pnt}, $\eta_{\rm PNT}(X)\to0$.
+For an affine $f$ on $[t_0,t_1]\subset[1/R,11/4]$, Stieltjes integration by
+parts gives
+\begin{equation*}
+ m\sum_{t_0m<p<t_1m} f(p/m)\log p
+ =m^2\int_{t_0}^{t_1} f(\rho)\,d\rho
+  +O_f\bigl(\eta_{\rm PNT}(m/R)m^2+m\log m\bigr).
+\end{equation*}
+There are finitely many pieces, and the primes at the finitely many points
+of $\mathcal C\cup\{1/R,5/4,2,11/4\}$, at most one for each point and each
+$m$, contribute $O(m\log m)$. For $p\le m/R$ the first powers contribute
+$(13m/4)\theta_{\rm Ch}(m/R)=\frac{13}{4R}m^2+o(m^2)$, and the higher powers, including
+those of two and three,
+\[
+ O\Bigl(m\sum_{j=2}^{\lfloor\log_2U\rfloor}\theta_{\rm Ch}(U^{1/j})\Bigr)
+ =O(m^{3/2}\log(3m)).
+\]
+Subtract $N_m\log3$ once. For $p>5m/4$ the exponent is $m\mathfrak c_{\rm out}(p/m)$
+with
+\[
+ \mathfrak c_{\rm out}(\rho)=\begin{cases}
+ 19/4-2\rho,&5/4<\rho<2,\\
+ 11/4-\rho,&2\le\rho\le11/4,
+ \end{cases}
+ \qquad
+ \int_{5/4}^{11/4}\mathfrak c_{\rm out}(\rho)\,d\rho=\frac98+\frac9{32}=\frac{45}{32}.
+\]
+With \eqref{eq:inner-integral} this gives $A-\frac{53}{48}\log3=\tau$.
+The total error is
+$O(\eta_{\rm PNT}(m/R)m^2+m^{3/2}\log(3m))=o(m^2)$. The bounds
+$\log3>2\sum_{k=0}^{99}((2k+1)2^{2k+1})^{-1}$ and
+$\log3<2\sum_{k=0}^{99}((2k+1)2^{2k+1})^{-1}+8/(3\cdot201\cdot2^{201})$
+give the digits of $\tau$ and of $\alpha_0-\tau$.
+\end{proof}
+
+\section{Analytic estimate}\label{sec:analytic}
+
+In \eqref{eq:integral-identity} there are $m$, $L=5m/4$ and $m$ variables
+$x$, $v$, $z$. Let
+\[
+ \mathcal K_x=\mathcal K_v=[0,1],\qquad
+ \mathcal K_z=[1,3]\cup\{z:|z|=r\}.
+\]
+For finite positive measures put
+\begin{align*}
+ I(\sigma,\sigma')&=\iint\log|u-w|\,d\sigma(u)\,d\sigma'(w),\qquad
+ D(\sigma,\sigma')=\iint\log|3-uw|\,d\sigma(u)\,d\sigma'(w),\\
+ \mathcal Q(\mu)&=I(\mu_x,\mu_x)+I(\mu_v,\mu_v)+I(\mu_z,\mu_z)
+                +I(\mu_v,\mu_z)-D(\mu_x,\mu_v).
+\end{align*}
+For a fixed $\nu=(\nu_x,\nu_v,\nu_z)$ let
+$\mathcal U_i(q)=\int\log|q-t|\,d\nu_i(t)$,
+$D_i(q)=\int\log|3-qt|\,d\nu_i(t)$ $(i=x,v)$,
+\begin{align*}
+ \psi_x&=2\mathcal U_x-D_v,\qquad
+ \psi_v=2\mathcal U_v+\mathcal U_z-D_x,\qquad
+ \psi_z=2\mathcal U_z+\mathcal U_v,\\
+ F_x(q)&=\psi_x(q)+\tfrac34\log q,\quad
+ F_v(q)=\psi_v(q)+\tfrac14\log q\quad(0<q\le1),\\
+F_z(q)&=\psi_z(q)-\tfrac54\log|q|\quad(q\in\mathcal K_z).
+\end{align*}
+For a compact line segment or circle $\Gamma\subset\mathbb C$ let
+$\ell_\Gamma$ be arclength on $\Gamma$. A segment meets the open disk
+$B(q,t)=\{w:|w-q|<t\}$ in length at most $2t$. A circle meets it in
+arclength at most $2\pi t$. If $t$
+is at least the radius, this follows from the length of the circle. Otherwise the
+intersection is an arc of at most a semicircle, of length at most $\pi/2$
+times its chord. So
+$\ell_\Gamma(B(q,t))\le2\pi t$ for all $q\in\mathbb C$, $t>0$.
+A positive measure $\eta$ is \emph{tame} if
+$\eta\le H(\ell_{\Gamma_1}+\dots+\ell_{\Gamma_N})$ for some $H\ge0$ and
+compact segments or circles $\Gamma_1,\ldots,\Gamma_N$, that is, if $\eta$
+is a finite sum of measures with arclength density at most $H$ on finitely
+many segments and circles. Tame measures are finite and compactly
+supported, and sums of tame measures are tame. Let $\mathfrak M$ be the set
+of triples $\mu=(\mu_x,\mu_v,\mu_z)$ of tame measures of masses $(1,5/4,1)$
+with $\operatorname{supp}\mu_x\subseteq\{|q|\le19/16\}$ and
+$\operatorname{supp}\mu_v\subseteq\{\zeta\le|q|\le19/16\}$ for some
+$\zeta>0$. On these supports $|3-uw|\ge3-(19/16)^2>1$.
+
+\begin{lemma}\label{lem:concavity}
+For $\mu,\nu\in\mathfrak M$, with $\psi_x,\psi_v,\psi_z$ formed from $\nu$,
+\begin{equation}\label{eq:dual-inequality}
+ \mathcal Q(\mu)\le-\mathcal Q(\nu)
+            +\int\psi_x\,d\mu_x+\int\psi_v\,d\mu_v+\int\psi_z\,d\mu_z.
+\end{equation}
+\end{lemma}
+\begin{proof}
+We first show that for tame $\eta,\eta'$
+\[
+ \iint|\log|u-w||\,d\eta(u)\,d\eta'(w)<\infty.
+\]
+By the definition of tame it suffices to take $\eta=\ell_\Gamma$, $\eta'=\ell_{\Gamma'}$. Let
+$\Lambda\ge1$ bound $|u-w|$ on $\Gamma\times\Gamma'$. For $u\in\Gamma$ the
+layer-cake formula and the bound on $\ell_{\Gamma'}(B(u,t))$ give
+\[
+ \int|\log|u-w||\,d\ell_{\Gamma'}(w)
+ \le\int_0^\infty\ell_{\Gamma'}(B(u,e^{-s}))\,ds+\ell_{\Gamma'}(\mathbb C)\log\Lambda
+ \le2\pi+\ell_{\Gamma'}(\mathbb C)\log\Lambda,
+\]
+and integration over $u$ gives the bound.
+
+Let $V$ be the space of real signed measures $\eta-\eta'$ with $\eta,\eta'$
+tame and $\eta(\mathbb C)=\eta'(\mathbb C)$. By this bound $I$
+is finite on $V\times V$ and on pairs of tame measures, so all pairings
+below are finite. For $\sigma=\eta-\eta'\in V$ one has
+$|\sigma|\le\eta+\eta'$, and Fact~\ref{fact:energy} gives
+\[
+ \|\sigma\|^2=-I(\sigma,\sigma)\ge0.
+\]
+So $-I$ is a positive semidefinite symmetric form on $V$, and
+$|I(\sigma,\sigma')|\le\|\sigma\|\,\|\sigma'\|$.
+
+Put $\sigma_i=\mu_i-\nu_i\in V$, $\iota(v)=3/v$ and $\beta=\iota_*\sigma_v$. The
+$v$-parts are supported in $A=\{\zeta\le|q|\le19/16\}$ (the smaller
+$\zeta$). The map $\iota$ sends $\Gamma\setminus\{0\}$ into a line or circle and
+$A$ into $\{|q|\le3/\zeta\}$, and $|\iota'(v)|=3/|v|^2>1$ on $A$. So
+$\iota_*(\ell_\Gamma|_A)\le\ell_{\Gamma'}$ for a compact segment or circle
+$\Gamma'$. Hence $\iota_*\mu_v$ and $\iota_*\nu_v$ are tame, $\beta\in V$, and
+$\log|v|$ is bounded on $A$. From
+\begin{align*}
+ \log|\iota(v)-\iota(w)|&=\log3+\log|v-w|-\log|v|-\log|w|,\\
+ \log|3-xv|&=\log|x-\iota(v)|+\log|v|,
+\end{align*}
+and the zero masses,
+\[
+ I(\beta,\beta)=I(\sigma_v,\sigma_v),\qquad
+ D(\sigma_x,\sigma_v)=I(\sigma_x,\beta).
+\]
+With $s_x=\|\sigma_x\|$, $s_v=\|\sigma_v\|=\|\beta\|$ and $s_z=\|\sigma_z\|$,
+\begin{align*}
+ \mathcal Q(\sigma)
+ &=-s_x^2-s_v^2-s_z^2+I(\sigma_v,\sigma_z)-I(\sigma_x,\beta)
+ \le-s_x^2-s_v^2-s_z^2+s_vs_z+s_xs_v\\
+ &=-(s_x-s_v/2)^2-(s_z-s_v/2)^2-s_v^2/2\le0.
+\end{align*}
+Let $\mathcal Q(\cdot,\cdot)$ be the symmetric bilinear form with
+$\mathcal Q(\mu,\mu)=\mathcal Q(\mu)$. Then
+$2\mathcal Q(\nu,\mu)=\int\psi_x\,d\mu_x+\int\psi_v\,d\mu_v+\int\psi_z\,d\mu_z$
+and
+\[
+ \mathcal Q(\mu)=\mathcal Q(\nu)+2\mathcal Q(\nu,\sigma)+\mathcal Q(\sigma)
+ \le2\mathcal Q(\nu,\mu)-\mathcal Q(\nu).\qedhere
+\]
+\end{proof}
+
+\begin{lemma}[computer-assisted]\label{lem:reference-bound}
+The measure $\nu$ of Tables~\ref{tab:reference-intervals}
+and~\ref{tab:reference-poisson} lies in $\mathfrak M$,
+$\operatorname{supp}\nu_i\subseteq\mathcal K_i$, and
+\begin{gather}
+ \mathcal Q(\nu)\ge q_-:=\qminus,\label{eq:Q-lower}\\
+ F_x\le K_x:=\Kx,\qquad F_v\le K_v:=\Kv,
+ \qquad F_z\le K_z:=\Kz\label{eq:caps}
+\end{gather}
+on $(0,1]$, $(0,1]$ and $\mathcal K_z$. On $|z|=r$ even $F_z\le\Kzcirc$.
+\end{lemma}
+\begin{proof}
+By Appendix~\ref{app:reference-data}, $\nu_x$, $\nu_v$ and the interval
+part $\nu_z^{\rm int}$ of $\nu_z$ are sums of $131$, $143$ and $105$
+intervals $[t_0,t_1]$ of positive mass $w$, each carrying
+$w\,dt/(t_1-t_0)$. The intervals of each part form a chain of adjacent
+intervals, contained in $[v_0,1]$ for $\nu_v$, $v_0=\vzero$. The circular
+part $\nu_z^{\rm Poi}$ is a sum of $167$ Poisson measures $(c,w)$ with
+$w>0$ and $|c|<r$,
+\[
+ \frac{w(r^2-|c|^2)}{2\pi|re^{i\vartheta}-c|^2}\,d\vartheta
+ \qquad(0\le\vartheta\le2\pi).
+\]
+Its arclength density is at most $H_c$ in \eqref{eq:poisson-density}. The
+masses are $1$, $5/4$ and $1$, and $\nu_z$ is invariant under
+conjugation. Let $H_x,H_v,H_z$ be the largest values of $w/(t_1-t_0)$ over
+the intervals of the three parts. So the parts of $\nu$ are tame,
+$\operatorname{supp}\nu_v\subseteq[v_0,1]$, and $\nu\in\mathfrak M$. An
+interval has potential
+\[
+ \frac{w}{t_1-t_0}\operatorname{Re}\{f(q-t_0)-f(q-t_1)\},\qquad f(u)=u\log u-u,
+\]
+with $u\log|u|-u$ on the real line and $0\log0=0$. A Poisson measure has potential
+\begin{equation}\label{eq:poisson-potential}
+ w\begin{cases}
+ \log|r^2-q\overline c|-\log r,&|q|\le r,\\
+ \log|q-c|,&|q|\ge r.
+ \end{cases}
+\end{equation}
+
+\emph{Energy.} Interval pairs use $g(u)=\tfrac12u^2\log|u|-\tfrac34u^2$,
+with $g''(u)=\log|u|$. A pair of Poisson measures $(c,w)$, $(c',w')$ gives
+$ww'(\log|r^2-c\overline{c'}|-\log r)$, by \eqref{eq:poisson-potential} and
+harmonicity. Interval--Poisson pairs integrate \eqref{eq:poisson-potential}
+with the primitives of $\log|t-c|$ and $\log|r^2-t\overline c|$, split at
+$t=r$. For the denominator, with $\mathsf M_j^i=\int t^j\,d\nu_i$ and
+$N=\NE$,
+\[
+ D(\nu_x,\nu_v)=\frac54\log3-\sum_{j=1}^{N}\frac{\mathsf M_j^x\mathsf M_j^v}{j3^j}-\mathcal E_N,
+ \qquad 0\le \mathcal E_N\le\frac{5/4}{2(N+1)3^{N}}.
+\]
+Table~\ref{tab:energy} gives the outward enclosures, at $\precE$-bit
+precision. The enclosure of $D(\nu_x,\nu_v)$ contains the partial sum
+minus $[0,(5/4)/(2(N+1)3^N)]$. The interval sum of the rows gives
+$\mathcal Q(\nu)>q_-+5\cdot10^{-7}$.
+
+\emph{Small arguments.} Put $\varepsilon_0=10^{-12}$. For $0<q\le\varepsilon_0$,
+$\mathcal U_x(q),\mathcal U_v(q)\le0$, $\mathcal U_z(q)\le\log(3+\varepsilon_0)$,
+$D_v(q)\ge\frac54\log(3-\varepsilon_0)$ and $D_x(q)\ge\log(3-\varepsilon_0)$. Hence
+\begin{align*}
+ F_x(q)&\le-\tfrac54\log(3-\varepsilon_0)+\tfrac34\log\varepsilon_0<-22.09,\\
+ F_v(q)&\le\log(3+\varepsilon_0)-\log(3-\varepsilon_0)+\tfrac14\log\varepsilon_0<-6.90.
+\end{align*}
+Both are below the caps.
+
+\emph{Subdivision.} The bounds on $[\varepsilon_0,1]$, $[\varepsilon_0,1]$,
+$[1,3]$ and the upper half of $|z|=r$ are proved on the $\nleaves$ closed
+pieces (leaves) of Lemma~\ref{lem:leaves}. The lower half of the circle
+follows by conjugation. All bounds are computed in Arb ball arithmetic
+\cite{Arb} at $\precF$-bit precision.
+
+Let $[l,u]$ be a leaf on a real support, with centre $c_0$ and half-width
+$h_0$. The interval components of $F$ come from the chains of $\nu_x$ on
+$x$-leaves and of $\nu_v$, $\nu_z^{\rm int}$ on $v$- and $z$-leaves. The
+endpoints of the chains of $\nu_x$, $\nu_v$, $\nu_z^{\rm int}$ cut the
+initial pieces of the $x$-, $v$-, $z$-support. The chain of $\nu_z^{\rm int}$
+misses the $v$-support, and that of $\nu_v$ meets the $z$-support only at
+$1$. So the open leaf
+meets at most one interval $[t_0,t_1]$ of each of these chains, and then lies
+in it. A $v$-leaf lies in $[0,r]$ or in $[r,1]$.
+Write $F=F_C+F_N$, where $F_C$ is the sum of the interval components of $F$,
+with their coefficient $2$, whose interval contains $[l,u]$. Inside its
+interval a component is convex, since $\mathcal U''=w/((q-t_0)(t_1-q))>0$
+there, so $F_C$ lies below its chord on $[l,u]$. With
+$B\ge\max\{0,\sup_{(l,u)}F_N''\}$, Taylor's formula with integral remainder
+for $F_N$ at $c_0$ gives
+\[
+ \max_{[l,u]}F\le\max_{q\in\{l,u\}}\bigl(F_C(q)+F_N(c_0)+F_N'(c_0)(q-c_0)\bigr)
+ +\tfrac12h_0^2B,
+\]
+because the chord plus an affine function is affine. The other interval
+components have $\mathcal U''=-w/((q-t_0)(q-t_1))\le0$ on $(l,u)$. The terms
+$\frac34\log q$ and $\frac14\log q$ are concave, and
+$(-\frac54\log q)''\le\frac54l^{-2}$ on $[l,u]$. The terms $-D_v$, $-D_x$
+are expanded as $-M\log3+\sum_{j\ge1}\mathsf M_jq^j/(j3^j)$ with the first
+$N'=\NF$ moments. The omitted value is at most $M/(2(N'+1)3^{N'})$, the
+omitted derivative lies in $[0,M/(2\cdot3^{N'})]$, and the second
+derivative is at most $M/4$. On the real line a Poisson measure has second
+derivative $w\operatorname{Re}(-\overline c^2/(r^2-q\overline c)^2)
+\le w|c|^2/|r^2-q\overline c|^2$ for $|q|\le r$ and
+$w\operatorname{Re}(-(q-c)^{-2})\le w/|q-c|^2$ for $|q|\ge r$; $B$ uses
+enclosures of these second derivatives over the leaf.
+
+On an arc $q=re^{i\vartheta}$, $|\vartheta-\vartheta_0|\le h_0$, of the
+circle we take the smaller of two bounds. The first is
+\[
+ F(\vartheta_0)+h_0|F'(\vartheta_0)|+\tfrac12h_0^2B,\qquad
+ B\ge\max\{0,\sup F''\},
+\]
+with derivatives in $\vartheta$ and
+\[
+ \frac{d}{d\vartheta}\log|q-s|=\operatorname{Re}\frac{iq}{q-s},\qquad
+ \frac{d^2}{d\vartheta^2}\log|q-s|=\operatorname{Re}\frac{qs}{(q-s)^2}
+ \le\frac{r|s|}{|q-s|^2}.
+\]
+Here $B$ uses enclosures over the arc of these second derivatives for the
+Poisson terms ($s=c$). For an interval component of mass $w$ and density
+$H$ on $[t_0,t_1]$ it uses the smaller upper end of two enclosures: of the
+exact second derivative
+$H\operatorname{Re}\bigl(q\log\frac{q-t_1}{q-t_0}+\frac{q^2}{q-t_1}-\frac{q^2}{q-t_0}\bigr)$,
+and of $w\operatorname{Re}(qs/(q-s)^2)$
+with $s$ ranging over $[t_0,t_1]$. The second bound uses that the distance from $re^{i\vartheta}$
+to a point $s\ge0$ increases with $\vartheta\in[0,\pi]$. It bounds the
+real-interval terms by their value at the right end of the arc and applies
+the first bound to the Poisson terms alone. On the arc starting at
+$\vartheta=0$ only the second bound is used.
+
+On every leaf the upper end of the resulting bound is below the cap of its
+support in Table~\ref{tab:caps}: $K_x$, $K_v$, $K_z$ on $[1,3]$, and
+$\Kzcirc<K_z$ on the circle. Table~\ref{tab:caps} gives the largest upper
+end on each support. The least margin, attained on $[1,3]$, is at least
+$\capmargin$.
+\end{proof}
+
+For this $\nu$ put
+\begin{equation}\label{eq:alpha}
+ \alpha=q_--\tfrac32\log3-K_x-\tfrac54K_v-K_z.
+\end{equation}
+Since $\frac32\log3<1647919/10^6$,
+\[
+ \alpha>\alpha_0:=q_--\frac{1647919}{10^6}-K_x-\frac54K_v-K_z=\alphazero.
+\]
+
+\begin{lemma}\label{lem:potential-modulus}
+Let $\eta$ be a compactly supported positive measure of mass $M$ with
+$\eta(B(q,t))\le At$ for all $q\in\mathbb C$, $t>0$. If $0<d=|q-q'|\le1/3$, then
+\[
+ \Bigl|\int\log|q-t|\,d\eta(t)-\int\log|q'-t|\,d\eta(t)\Bigr|
+ \le(6A+2M)\,d\,(1+\log(1/d)).
+\]
+The components of the reference of Lemma~\ref{lem:reference-bound} are
+compactly supported, and for them one may take
+\begin{equation}\label{eq:disk-constants}
+ A_x=2H_x,\qquad A_v=2H_v,\qquad
+ A_z=2H_z+\sum_c\frac{w_c(r+|c|)}{r(r-|c|)},
+\end{equation}
+the sum over the $167$ Poisson measures $(c,w_c)$. It is finite, since
+$|c|<r$ for every centre.
+\end{lemma}
+\begin{proof}
+The closed disk $\{w:|w-q|\le s\}$ is the intersection of the $B(q,s')$,
+$s'>s$, so its $\eta$-measure is also at most $As$.
+Let $N=\{t:|q-t|\le2d\}$. On $N$ both distances are at most $3d\le1$, and
+the layer-cake formula gives
+\begin{align*}
+ \int_N\log\frac1{|q-t|}\,d\eta&\le2Ad\log\frac1{2d}+2Ad,\\
+ \int_N\log\frac1{|q'-t|}\,d\eta&\le2Ad\log\frac1{3d}+3Ad.
+\end{align*}
+Off $N$, $|q'-t|\ge|q-t|/2$, the logarithmic difference is at most
+$2d/|q-t|$, and
+\[
+ \int_{|q-t|>2d}\frac{d\eta(t)}{|q-t|}
+ \le\int_0^1M\,ds+\int_1^{1/(2d)}\frac As\,ds
+ =M+A\log\frac1{2d}.
+\]
+The sum is at most $6Ad\log(1/d)+5Ad+2Md$.
+
+By the bounds on $\ell_\Gamma(B(q,t))$ before Lemma~\ref{lem:concavity}, an
+interval of density at most $H_i$ gives $2H_i$, and a Poisson measure gives
+$2\pi H_c$: since $|re^{i\vartheta}-c|\ge r-|c|$ and arclength is
+$r\,d\vartheta$, its arclength density is at most
+\begin{equation}\label{eq:poisson-density}
+ H_c=\frac{w(r+|c|)}{2\pi r(r-|c|)}.\qedhere
+\end{equation}
+\end{proof}
+
+Put $M_x=1$, $M_v=5/4$, $M_z=1$, and
+\begin{equation}\label{eq:S-constant}
+ B_i=6A_i+2M_i,\qquad
+ S=2B_x+\tfrac72B_v+\tfrac{13}4B_z,\qquad C=10+3S.
+\end{equation}
+$S$ and $C$ are finite and depend only on $\nu$.
+
+\begin{lemma}\label{lem:analytic-bound}
+For every $m=4n\ge4$,
+\begin{equation}\label{eq:analytic-full}
+\begin{split}
+ \log|G_m(\theta)|\le{}&-\alpha m^2+\tfrac{13}{2}m\log m
+   +3S\bigl(1+\log(m^2/3)\bigr)+\tfrac{45}{4}\\
+  &+m\log(T_r/3)-\log\bigl((m!)^2L!\bigr),
+\end{split}
+\end{equation}
+and hence $\log|G_m(\theta)|\le-\alpha_0m^2+Cm\log m$ with $C$ as in
+\eqref{eq:S-constant}.
+\end{lemma}
+\begin{proof}
+Expand $\Gamma^m$ in \eqref{eq:integral-identity} into products of its
+pieces and take absolute values. By \eqref{eq:chain-variation} the paths
+contribute a factor at most $T_r^m$, and $[0,1]^m\times[0,1]^L$ has volume
+one. So it suffices to bound $\log|\Phi|$ for $x\in[0,1]^m$,
+$v\in[0,1]^L$, $z\in\mathcal K_z^m$. If $\Phi=0$ there is nothing to
+prove. Otherwise $x_{i'},v_b>0$ and the points of each species are distinct.
+Let $\mu_x$, $\mu_v$, $\mu_z$ put mass $1/m$ at each $x_{i'}$, $v_b$, $z_d$. Since
+$\sigma+k+h=3m/4$, $\sigma=m/4$ and $m+k=5m/4$,
+\begin{equation}\label{eq:energy-form}
+ \frac{\log|\Phi|}{m^2}=\mathcal Q_{\rm disc}(\mu)
+ +\frac34\int\log x\,d\mu_x+\frac14\int\log v\,d\mu_v
+ -\frac54\int\log|z|\,d\mu_z,
+\end{equation}
+where $\mathcal Q_{\rm disc}$ omits the diagonal in the three self-energies.
+
+Put $\epsilon=m^{-2}\le1/16$. Replace every atom $q$ by the uniform measure
+of mass $1/m$ on the circle $q+2i\epsilon+\epsilon e^{i\vartheta}$, and let
+$\mu^\epsilon$ be the result. Since
+$\frac1{2\pi}\int_0^{2\pi}\log|u+\epsilon e^{i\vartheta}|\,d\vartheta
+=\log\max(|u|,\epsilon)$ and the common translation cancels in
+differences, averaging does not decrease any off-diagonal positive pair. Each
+circle has energy $\log\epsilon$, and there are $13m/4$ atoms. The
+function $\log|3-XV|$ is harmonic in each variable on the product of two
+smearing disks, since $|X|,|V|\le1+3\epsilon\le19/16$. Its mean is
+$\log|3-(x+2i\epsilon)(v+2i\epsilon)|\le\log(3-xv)+3\epsilon$, because
+$|(x+2i\epsilon)(v+2i\epsilon)-xv|\le4\epsilon+4\epsilon^2$ and $3-xv\ge2$.
+With the masses $1\cdot5/4$,
+\begin{equation}\label{eq:smoothing}
+ \mathcal Q_{\rm disc}(\mu)\le\mathcal Q(\mu^\epsilon)
+ +\frac{13}{4m}\log\frac1\epsilon+\frac{15}4\epsilon.
+\end{equation}
+The measures $\mu^\epsilon$ and $\nu$ lie in $\mathfrak M$: $\mu^\epsilon$
+is a sum of uniform measures on circles, inside $\{|q|\le19/16\}$ for $x$
+and $v$, with $\operatorname{Im}q\ge\epsilon$ on the $v$-circles. For $\nu$
+this is part of Lemma~\ref{lem:reference-bound}. By Lemmas~\ref{lem:concavity}
+and~\ref{lem:reference-bound},
+\[
+ \mathcal Q(\mu^\epsilon)\le-q_-+\sum_{i}\int\psi_i\,d\mu_i^\epsilon.
+\]
+
+Each point of a smearing circle lies within $d=3\epsilon\le3/16$ of the
+atom $q$ it replaces. Since $s\mapsto s(1+\log(1/s))$ increases on $(0,1]$,
+Lemma~\ref{lem:potential-modulus} bounds the change of $\mathcal U_i$ by
+$B_id(1+\log(1/d))$. For $q\in[0,1]$, $|p-q|\le d$ and
+$0\le t\le1$, $|\nabla_p\log|3-pt||\le t/|3-pt|\le1$, so $D_i$ changes by
+at most $M_id$. Counting masses, the coefficients of $B_x,B_v,B_z$ are
+$2$, $\frac54\cdot2+1=\frac72$ and $\frac54+2=\frac{13}4$, and the $D$ terms
+give $\frac54+\frac54=\frac52$. Hence
+\[
+ \sum_i\int\psi_i\,d\mu_i^\epsilon
+ \le\sum_i\int\psi_i\,d\mu_i+Sd(1+\log(1/d))+\tfrac52d.
+\]
+The atoms lie in $(0,1]$, $(0,1]$ and $\mathcal K_z$. Adding the original
+external terms of \eqref{eq:energy-form} turns $\psi_i$ into $F_i$, and
+\eqref{eq:caps} gives
+\[
+ \frac{\log|\Phi|}{m^2}\le-q_-+K_x+\tfrac54K_v+K_z
+ +\frac{13}{4m}\log\frac1\epsilon+3S\epsilon\Bigl(1+\log\frac1{3\epsilon}\Bigr)
+ +\frac{45}4\epsilon,
+\]
+with $45/4=15/4+3\cdot5/2$. Multiply by $m^2$, put $\epsilon=m^{-2}$, add
+the logarithm $(3m^2/2-m)\log3-\log((m!)^2L!)$ of the prefactor in
+\eqref{eq:integral-identity} and $m\log T_r$. By \eqref{eq:alpha} this is
+\eqref{eq:analytic-full}.
+
+For the last statement drop $-\log((m!)^2L!)$ and $m\log(T_r/3)<0$. As
+$m\ge4$, $3S(1+2\log m-\log3)\le6S\log m\le3Sm\log m$ and
+$45/4\le3m\log m$. So the right-hand side is at most
+$-\alpha m^2+(10+3S)m\log m=-\alpha m^2+Cm\log m$.
+\end{proof}
+
+\section{Nonvanishing}\label{sec:nonvanishing}
+
+Let $\Z_{(17)}=\{u/v\in\mathbb Q:17\nmid v\}$, and let $v_{17}$ be the
+$17$-adic valuation, $v_{17}(0)=+\infty$.
+
+\begin{lemma}\label{lem:g-mod-17}
+For $m=4$, coefficientwise in $\Z_{(17)}[T]$,
+\begin{equation}\label{eq:g-mod-17}
+G_4(T)\equiv g(T):=11+5T^2+4T^4\pmod {17}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Here $I=\{2,\ldots,5\}$, $J=\{1,\ldots,9\}$, $\Lambda=\{1\}$, and all
+denominators divide $6350400=2520^2$, prime to $17$. Modulo $17$ the matrix
+\eqref{eq:determinant} is
+\begin{equation}\label{eq:g4-mod-matrix}
+\setlength{\arraycolsep}{3.5pt}
+\begin{pmatrix}
+11&0&16&15&7&7&3&13&9\\
+5&16&0&14&11&4&4&9&5\\
+8&15&14&0&8&16&12&12&10\\
+8&7&11&8&0&7&14&2&2\\
+6&16+8T&4&13&10&3&15&14&8\\
+5&4&16+7T&5&13&14&5&16&3\\
+5&13&5&13+4T&4&10&5&6&6\\
+9&10&13&4&3+12T&16&14&1&15\\
+9&6&13&7&3&5&15&2&12
+\end{pmatrix}.
+\end{equation}
+Its determinant is $g(T)$. Reduction of \eqref{eq:g4-polynomial}, where
+$9/67228000000000\equiv13\pmod{17}$ and
+$(q_0,q_1,q_2,q_3,q_4)\equiv(10,0,3,0,16)\pmod{17}$, gives the same
+polynomial.
+\end{proof}
+
+\begin{lemma}\label{lem:nonvanishing}
+Let $\xi\in\mathbb Q$. For every integer $t\ge1$ with $2t+v_{17}(\xi)>0$,
+$G_{4\cdot17^t}(\xi)\ne0$.
+\end{lemma}
+
+\begin{proof}
+Put $Q_t=17^t$, $m_t=4Q_t$ and $h=\sigma=k=Q_t$, and
+\begin{equation}\label{eq:scaled-polynomial}
+P_t(W)=Q_t^{3m_t+h}G_{m_t}(W/Q_t^2).
+\end{equation}
+This is the determinant obtained after $T=W/Q_t^2$ by multiplying the $C$,
+$B-TA$ and $V$ rows by $Q_t$, $Q_t^2$ and $Q_t$. The middle rows become
+$Q_t^2B-WA$. Every nonzero index,
+difference and Cauchy denominator has absolute value less than $17Q_t$,
+hence $17$-adic valuation at most $t$. So $Q_tt_i$ and $Q_t^2b_i$ lie in
+$\Z_{(17)}$, and for $i\ne j$
+\[
+ Q_t^2B_{ij}=\frac{Q_t}{j-i}\,(Q_tt_i-Q_tt_j),\qquad
+ Q_tC_{ij}=\frac{Q_t}{j-i}\,(a^i-a^j),\qquad
+ Q_tV_{\ell j}=\frac{Q_t}{j+\ell},
+\]
+with $v_{17}(j-i),v_{17}(j+\ell)\le t$. So all entries of the scaled matrix
+lie in $\Z_{(17)}[W]$. Hence
+$P_t\in\Z_{(17)}[W]$.
+
+Let $0\le u<Q_t$. Only the summation indices divisible by $Q_t$
+survive, and $a^{Q_t}\equiv a\pmod{17}$, so
+\begin{equation*}
+Q_t t_{Q_t j+u}\equiv a^ut_j,
+\qquad Q_t^2b_{Q_t j+u}\equiv a^ub_j\pmod {17}.
+\end{equation*}
+The scaled $C$ and $B$ entries vanish modulo $17$ between distinct residue
+classes modulo $Q_t$. In the class $u$ write $i=Q_t i_0+u$, $j=Q_t j_0+u$. Then
+$2\le i_0\le5$, $1\le j_0\le9$, and $A_{ii}\equiv a^uA_{i_0i_0}$. The only $V$ row in this class is
+$\ell=Q_t-u$, with
+\[
+\frac{Q_t}{j+\ell}=\frac{1}{j_0+1}.
+\]
+Cross-class $C$ and $B$ entries have $17$-adic valuation at least $1$.
+Within a class the nonzero differences $j_0-i_0$ satisfy $|j_0-i_0|\le7<17$
+and are units. All other scaled $V$ entries vanish modulo $17$. So, after permutations,
+the matrix has $Q_t$ diagonal blocks
+\[
+\begin{bmatrix}
+a^u C_4\\ a^u(B_4-WA_4)\\ V_4
+\end{bmatrix},\qquad 0\le u<Q_t,
+\]
+where the subscript $4$ refers to $G_4$. Each block has eight rows with the
+factor $a^u$. Hence
+\begin{equation}\label{eq:block-congruence}
+P_t(W)\equiv\varepsilon_t\,3^{4Q_t(Q_t-1)}g(W)^{Q_t}\pmod {17},
+\qquad \varepsilon_t\in\{1,-1\},
+\end{equation}
+coefficientwise. In particular $P_t(0)\equiv\pm3^{4Q_t(Q_t-1)}11^{Q_t}\not\equiv0\pmod{17}$.
+
+Take $W=Q_t^2\xi$. Then $v_{17}(W)=2t+v_{17}(\xi)>0$, and since
+$P_t\in\Z_{(17)}[W]$, $P_t(W)\equiv P_t(0)\not\equiv0\pmod{17}$. By
+\eqref{eq:scaled-polynomial}, $G_{m_t}(\xi)\ne0$.
+\end{proof}
+
+The restriction $2t+v_{17}(\xi)>0$ is needed in this argument: $g$ has the
+roots $7$ and $10$ in $\mathbb F_{17}$.
+
+\section{Proof of Theorem~\ref{thm:main}}\label{sec:proof}
+
+Suppose $\theta=u/q_0$ with $u\in\Z$ and $q_0\in\Z_{>0}$. By
+Lemmas~\ref{lem:moment-identity} and~\ref{lem:integerization},
+\[
+Z_m:=q_0^mK_mG_m(u/q_0)\in\Z.
+\]
+By Lemma~\ref{lem:nonvanishing} with $\xi=\theta$, $Z_m\ne0$ for
+$m=4\cdot17^t$ and all large $t$.
+By Lemmas~\ref{lem:integerization} and~\ref{lem:analytic-bound},
+\begin{equation*}
+\log|Z_m|\le-(\alpha_0-\tau)m^2+Cm\log m+o(m^2)+m\log q_0.
+\end{equation*}
+As $\alpha_0-\tau>\marginvalue>0$, the right-hand side tends to $-\infty$ along this
+sequence. So $0<|Z_m|<1$ for large $t$, which is impossible.
+\qed
+
+\appendix
+
+\section{Arithmetic integration}\label{app:arithmetic}
+Table~\ref{tab:line-families} lists the lines \eqref{eq:subdivision-lines}
+for the seam $R=\Rseam$. The index ranges are the integer solutions of
+$4z_0/5-1<k<z_0R$ and $1\le w<R/4+1$ (Section~\ref{sec:divisor}).
+
+Table~\ref{tab:slabs} gives, for $\rho_0<\rho<\rho_1$, the function
+$\mathfrak c(\rho)=c_0+c_1\rho$. Consecutive rows share an endpoint. The
+first row starts at $1/R$ and the last ends at $5/4$. The rows are the
+$\nslabs$ open intervals of $(1/R,5/4)\setminus\mathcal C$, so a row can be
+checked at one interior point $\rho$: the six cells of
+\eqref{eq:residue-sets} at $\rho$ give an affine function of $\rho$, which
+must equal $c_0+c_1\rho$. Then
+\[
+ \int_{1/R}^{5/4}\mathfrak c(\rho)\,d\rho
+ =\sum_{\rm rows}(\rho_1-\rho_0)\Bigl(c_0+c_1\frac{\rho_0+\rho_1}2\Bigr).
+\]
+
+\begin{center}\small\renewcommand{\arraystretch}{1.12}
+\begin{minipage}{\textwidth}\centering
+\captionof{table}{Line families of \eqref{eq:subdivision-lines}.}\label{tab:line-families}
+\begin{tabular}{llr}
+\hline
+family & lines & count\\
+\hline
+strip & $x=0$, $x=\rho$ & $2$\\
+$\mathcal L$ lower & $x=1/4-k\rho$, $0\le k\le\kLlo$ & $\the\numexpr\kLlo+1\relax$\\
+$K$ lower & $x=1/2-k\rho$, $0\le k\le\kKlo$ & $\the\numexpr\kKlo+1\relax$\\
+$K$ upper & $x=3/2-k\rho$, $1\le k\le\kKhi$ & $\kKhi$\\
+$\mathcal L$ upper & $x=5/2-k\rho$, $2\le k\le\kLhi$ & $\the\numexpr\kLhi-1\relax$\\
+$W$ & $x=w\rho-1/4$, $1\le w\le\wmax$ & $\wmax$\\
+\hline
+total & & $\nlines$\\
+\hline
+\end{tabular}
+\end{minipage}
+\end{center}
+
+\begingroup\small
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{@{}llll@{\hspace{1.4em}}llll@{\hspace{1.4em}}llll@{}}
+\caption{The affine pieces of $\mathfrak c$ on $(1/R,5/4)$, $R=\Rseam$:
+$\mathfrak c(\rho)=c_0+c_1\rho$ for $\rho_0<\rho<\rho_1$.}\label{tab:slabs}\\
+\hline
+$\rho_0$&$\rho_1$&$c_0$&$c_1$&$\rho_0$&$\rho_1$&$c_0$&$c_1$&$\rho_0$&$\rho_1$&$c_0$&$c_1$\\
+\hline
+\endfirsthead
+\hline
+$\rho_0$&$\rho_1$&$c_0$&$c_1$&$\rho_0$&$\rho_1$&$c_0$&$c_1$&$\rho_0$&$\rho_1$&$c_0$&$c_1$\\
+\hline
+\endhead
+$1/8$ & $11/84$ & $9/2$ & $-10$ & $2/11$ & $11/60$ & $11/4$ & $2$ & $1/3$ & $11/32$ & $9/2$ & $-4$\\
+$11/84$ & $5/38$ & $7/4$ & $11$ & $11/60$ & $3/16$ & $11/4$ & $2$ & $11/32$ & $7/20$ & $7/4$ & $4$\\
+$5/38$ & $9/68$ & $17/4$ & $-8$ & $3/16$ & $5/26$ & $1/2$ & $14$ & $7/20$ & $5/14$ & $7/2$ & $-1$\\
+$9/68$ & $2/15$ & $17/4$ & $-8$ & $5/26$ & $7/36$ & $3$ & $1$ & $5/14$ & $3/8$ & $6$ & $-8$\\
+$2/15$ & $7/52$ & $9/4$ & $7$ & $7/36$ & $11/56$ & $19/4$ & $-8$ & $3/8$ & $11/28$ & $15/4$ & $-2$\\
+$7/52$ & $3/22$ & $4$ & $-6$ & $11/56$ & $1/5$ & $2$ & $6$ & $11/28$ & $2/5$ & $15/4$ & $-2$\\
+$3/22$ & $11/80$ & $5/2$ & $5$ & $1/5$ & $9/44$ & $3$ & $1$ & $2/5$ & $5/12$ & $7/4$ & $3$\\
+$11/80$ & $5/36$ & $5/2$ & $5$ & $9/44$ & $5/24$ & $21/4$ & $-10$ & $5/12$ & $7/16$ & $1/2$ & $6$\\
+$5/36$ & $9/64$ & $5/4$ & $14$ & $5/24$ & $11/52$ & $4$ & $-4$ & $7/16$ & $9/20$ & $9/4$ & $2$\\
+$9/64$ & $1/7$ & $7/2$ & $-2$ & $11/52$ & $3/14$ & $4$ & $-4$ & $9/20$ & $11/24$ & $9/2$ & $-3$\\
+$1/7$ & $11/76$ & $9/2$ & $-9$ & $3/14$ & $7/32$ & $5/2$ & $3$ & $11/24$ & $1/2$ & $7/4$ & $3$\\
+$11/76$ & $7/48$ & $7/4$ & $10$ & $7/32$ & $2/9$ & $17/4$ & $-5$ & $1/2$ & $11/20$ & $19/4$ & $-3$\\
+$7/48$ & $5/34$ & $7/2$ & $-2$ & $2/9$ & $9/40$ & $9/4$ & $4$ & $11/20$ & $9/16$ & $2$ & $2$\\
+$5/34$ & $3/20$ & $6$ & $-19$ & $9/40$ & $5/22$ & $9/4$ & $4$ & $9/16$ & $7/12$ & $17/4$ & $-2$\\
+$3/20$ & $11/72$ & $15/4$ & $-4$ & $5/22$ & $11/48$ & $19/4$ & $-7$ & $7/12$ & $5/8$ & $6$ & $-5$\\
+$11/72$ & $2/13$ & $15/4$ & $-4$ & $11/48$ & $1/4$ & $2$ & $5$ & $5/8$ & $2/3$ & $19/4$ & $-3$\\
+$2/13$ & $5/32$ & $7/4$ & $9$ & $1/4$ & $11/40$ & $9/2$ & $-5$ & $2/3$ & $11/16$ & $11/4$ & $0$\\
+$5/32$ & $7/44$ & $1/2$ & $17$ & $11/40$ & $5/18$ & $7/4$ & $5$ & $11/16$ & $3/4$ & $11/4$ & $0$\\
+$7/44$ & $9/56$ & $9/4$ & $6$ & $5/18$ & $9/32$ & $17/4$ & $-4$ & $3/4$ & $5/6$ & $1/2$ & $3$\\
+$9/56$ & $11/68$ & $9/2$ & $-8$ & $9/32$ & $2/7$ & $17/4$ & $-4$ & $5/6$ & $7/8$ & $3$ & $0$\\
+$11/68$ & $1/6$ & $7/4$ & $9$ & $2/7$ & $7/24$ & $9/4$ & $3$ & $7/8$ & $11/12$ & $19/4$ & $-2$\\
+$1/6$ & $11/64$ & $19/4$ & $-9$ & $7/24$ & $3/10$ & $4$ & $-3$ & $11/12$ & $1$ & $19/4$ & $-2$\\
+$11/64$ & $9/52$ & $2$ & $7$ & $3/10$ & $11/36$ & $5/2$ & $2$ & $1$ & $9/8$ & $15/4$ & $-1$\\
+$9/52$ & $7/40$ & $17/4$ & $-6$ & $11/36$ & $5/16$ & $5/2$ & $2$ & $9/8$ & $5/4$ & $6$ & $-3$\\
+$7/40$ & $5/28$ & $6$ & $-16$ & $5/16$ & $9/28$ & $5/4$ & $6$ & & & &\\
+$5/28$ & $2/11$ & $19/4$ & $-9$ & $9/28$ & $1/3$ & $7/2$ & $-1$ & & & &\\
+\hline
+\end{longtable}
+\endgroup
+
+With \eqref{eq:inner-integral},
+\[
+ A=\frac{13}{\Rfour}+\int_{1/R}^{5/4}\mathfrak c(\rho)\,d\rho+\frac{45}{32},
+\]
+the constant of \eqref{eq:tau}. The coefficient of $\log3$ is $53/48$, and the
+block \eqref{eq:rank-one-block} contributes $-5/48$ to
+\eqref{eq:inner-integral}.
+
+\section{Certified values}\label{app:numerical}
+
+Table~\ref{tab:energy} gives the energy of $\nu$. Here $\nu_z^{\rm int}$ and
+$\nu_z^{\rm Poi}$ are the interval and Poisson parts of $\nu_z$, $I_{\rm int}$ is the
+energy of $\nu_z^{\rm int}$, $I_{\rm mix}=I(\nu_z^{\rm int},\nu_z^{\rm Poi})$, $I_{\rm Poi}$ is the
+energy of $\nu_z^{\rm Poi}$, and
+\[
+ \mathcal Q(\nu)=I(\nu_x,\nu_x)+I(\nu_v,\nu_v)+I_{\rm int}+2I_{\rm mix}+I_{\rm Poi}
+ +I(\nu_v,\nu_z^{\rm int})+I(\nu_v,\nu_z^{\rm Poi})-D(\nu_x,\nu_v).
+\]
+Every displayed interval is outward rounded, and the row of $D(\nu_x,\nu_v)$
+contains the tail $\mathcal E_N$. The interval sum of the first eight rows,
+with these coefficients, exceeds $q_-$, which is \eqref{eq:Q-lower}.
+\begin{table}[!ht]
+\centering\small\renewcommand{\arraystretch}{1.14}\setlength{\tabcolsep}{5pt}
+\caption{The pair decomposition of $\mathcal Q(\nu)$ and its enclosures.}
+\label{tab:energy}
+\begin{tabular}{@{}lr@{}}
+\hline term & outward enclosure\\\hline
+$I(\nu_x,\nu_x)$ & \texttt{[-1.604087582665193,-1.604087582665192]}\\
+$I(\nu_v,\nu_v)$ & \texttt{[-2.279694146532524,-2.279694146532523]}\\
+$I_{\rm int}$ & \texttt{[-0.159655877431972,-0.159655877431971]}\\
+$I_{\rm mix}$ & \texttt{[0.226965417324502,0.226965417324503]}\\
+$I_{\rm Poi}$ & \texttt{[-0.495113146744583,-0.495113146744582]}\\
+$I(\nu_v,\nu_z^{\rm int})$ & \texttt{[0.278231287125003,0.278231287125004]}\\
+$I(\nu_v,\nu_z^{\rm Poi})$ & \texttt{[-0.191796788958401,-0.191796788958400]}\\
+$D(\nu_x,\nu_v)$ & \texttt{[1.195386024949843,1.195386024949844]}\\
+$\mathcal Q(\nu)$ & \texttt{[-5.193571445508505,-5.193571445508504]}\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[!ht]
+\centering\small\renewcommand{\arraystretch}{1.14}\setlength{\tabcolsep}{5pt}
+\caption{The caps \eqref{eq:caps}: leaves of Lemma~\ref{lem:leaves}, the
+largest upper bound over the leaves (rounded upward at $10^{-6}$) and the
+cap. On $\mathcal K_z$ the cap is $K_z=\max(\Kz,\Kzcirc)=\Kz$.}
+\label{tab:caps}
+\begin{tabular}{@{}lrrr@{}}
+\hline
+support&leaves&upper bound&cap\\
+\hline
+$x\in[\varepsilon_0,1]$ & $67584$ & $-4.831488$ & $-4.83148$\\
+$v\in[\varepsilon_0,1]$ & $37120$ & $-4.743190$ & $-4.74318$\\
+$z\in[1,3]$ & $13568$ & $0.043178$ & $0.04318$\\
+$|z|=r$, $\operatorname{Im}z\ge0$ & $8192$ & $0.042823$ & $0.04283$\\
+\hline
+\end{tabular}
+\end{table}
+
+\section{Reference measure and subdivision}\label{app:reference-data}
+Terminating decimals are exact. Other values are printed as fractions $p/q$.
+
+\subsection{Intervals}
+Table~\ref{tab:reference-intervals} gives $\nu_x$, $\nu_v$ and
+$\nu_z^{\rm int}$. Each is a chain of adjacent intervals. Its heading gives
+the start point $b_0$, and its row $(k,b_k,w_k)$ is the interval
+$[b_{k-1},b_k]$ carrying $w_k\,dt/(b_k-b_{k-1})$. The three chains have
+$131$, $143$ and $105$ rows and end at $1$, $1$ and $3$. Outside its chain a
+part vanishes. The masses are $1$, $5/4$ and $170340748021/500000000000$.
+\begingroup\small
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{@{}rll@{\hspace{1.2em}}ll@{\hspace{1.2em}}ll@{}}
+\caption{Interval chains of the reference measure. A line gives the rows $(k,b_k,w_k)$, $(k+1,b_{k+1},w_{k+1})$ and $(k+2,b_{k+2},w_{k+2})$.}\label{tab:reference-intervals}\\
+\hline
+$k$&$b_k$&$w_k$&$b_{k+1}$&$w_{k+1}$&$b_{k+2}$&$w_{k+2}$\\
+\hline
+\endfirsthead
+\hline
+$k$&$b_k$&$w_k$&$b_{k+1}$&$w_{k+1}$&$b_{k+2}$&$w_{k+2}$\\
+\hline
+\endhead
+\multicolumn{7}{@{}l}{$\nu_x$: $b_0=0.08426519384873$}\\
+1 & $0.09379426$ & $0.004878668$ & $0.1033233$ & $0.005388618$ & $0.1137017$ & $0.006994053$\\
+4 & $0.1240801$ & $0.007569004$ & $0.1352634$ & $0.008564016$ & $0.1464466$ & $0.008818097$\\
+7 & $0.1583869$ & $0.009590098$ & $0.1703271$ & $0.009692372$ & $0.1829732$ & $0.0103232$\\
+10 & $0.1956193$ & $0.01034485$ & $0.2089171$ & $0.01087642$ & $0.2222149$ & $0.0108577$\\
+13 & $0.2361074$ & $0.01131139$ & $0.25$ & $0.01127106$ & $0.2644278$ & $0.01166085$\\
+16 & $0.2788557$ & $0.01161365$ & $0.293757$ & $0.01194875$ & $0.3086583$ & $0.01190387$\\
+19 & $0.3239693$ & $0.01219079$ & $0.3392803$ & $0.01215494$ & $0.3549354$ & $0.01239796$\\
+22 & $0.3705905$ & $0.01237491$ & $0.3865227$ & $0.01257814$ & $0.4024548$ & $0.01257039$\\
+25 & $0.4185959$ & $0.01273679$ & $0.4347369$ & $0.01274778$ & $0.4510177$ & $0.01287879$\\
+28 & $0.4672984$ & $0.01290965$ & $0.4836492$ & $0.01300665$ & $0.5$ & $0.01305858$\\
+31 & $0.5163508$ & $0.01312226$ & $0.5327016$ & $0.01319818$ & $0.5489823$ & $0.01322769$\\
+34 & $0.5652631$ & $0.01332781$ & $0.5814041$ & $0.01332593$ & $0.5975452$ & $0.01345034$\\
+37 & $0.6134773$ & $0.01341514$ & $0.6294095$ & $0.01356788$ & $0.6450646$ & $0.01349774$\\
+40 & $0.6607197$ & $0.01367922$ & $0.6760307$ & $0.01357396$ & $0.6913417$ & $0.01378771$\\
+43 & $0.706243$ & $0.01364148$ & $0.7211443$ & $0.01389263$ & $0.7355722$ & $0.01370571$\\
+46 & $0.75$ & $0.01399346$ & $0.7638926$ & $0.01376403$ & $0.7777851$ & $0.01408874$\\
+49 & $0.7910829$ & $0.01381373$ & $0.8043807$ & $0.01418846$ & $0.8170268$ & $0.01385703$\\
+52 & $0.8296729$ & $0.01427975$ & $0.8416131$ & $0.01389719$ & $0.8535534$ & $0.01437142$\\
+55 & $0.8647366$ & $0.01392421$ & $0.8759199$ & $0.0144671$ & $0.8862983$ & $0.01394331$\\
+58 & $0.8966767$ & $0.0145547$ & $0.9062057$ & $0.01394895$ & $0.9157348$ & $0.0146563$\\
+61 & $0.9243738$ & $0.01394465$ & $0.9330127$ & $0.01475476$ & $0.9407245$ & $0.01392136$\\
+64 & $0.9484364$ & $0.01485533$ & $0.9551881$ & $0.01387691$ & $0.9619398$ & $0.01497938$\\
+67 & $0.9677024$ & $0.01379006$ & $0.9734651$ & $0.01513013$ & $0.978214$ & $0.01364607$\\
+70 & $0.9829629$ & $0.01534824607$ & $0.9864815$ & $0.01264469$ & $0.99$ & $0.01468005$\\
+73 & $0.9901963$ & $0.0009304798$ & $0.9903926$ & $0.0008176946$ & $0.9923846$ & $0.009526088$\\
+76 & $0.9943766$ & $0.01098753$ & $0.9950495$ & $0.004282778$ & $0.9957224$ & $0.004357794$\\
+79 & $0.9962801$ & $0.003907897$ & $0.9968377$ & $0.004198966$ & $0.9975297$ & $0.005760908$\\
+82 & $0.9982217$ & $0.006780532$ & $0.9985756$ & $0.003909506$ & $0.9989295$ & $0.004519428$\\
+85 & $0.9989498$ & $0.0002978646$ & $0.9989702$ & $0.0002759106$ & $0.9989851$ & $0.0002057553$\\
+88 & $0.999$ & $0.0002063948$ & $0.9990431$ & $0.0006106305$ & $0.9990862$ & $0.0006201$\\
+91 & $0.9991731$ & $0.001304877$ & $0.9992599$ & $0.00137548$ & $0.9993488$ & $0.001492587$\\
+94 & $0.9994377$ & $0.001607745$ & $0.9994512$ & $0.0002561717$ & $0.9994647$ & $0.0002462361$\\
+97 & $0.9995672$ & $0.002058841$ & $0.9996696$ & $0.002355955$ & $0.9996767$ & $0.0001814995$\\
+100 & $0.9996838$ & $0.0001633233$ & $0.999753$ & $0.00181967$ & $0.9998222$ & $0.002143887$\\
+103 & $0.9998327$ & $0.0003687629$ & $0.9998432$ & $0.0003554893$ & $0.9998716$ & $0.001051055$\\
+106 & $0.9999$ & $0.001186225$ & $0.9999219$ & $0.001022622$ & $0.9999438$ & $0.001204602$\\
+109 & $0.9999515$ & $0.0004787153$ & $0.9999593$ & $0.0005156937$ & $0.9999638$ & $0.0003258994$\\
+112 & $0.9999684$ & $0.000343669$ & $0.9999753$ & $0.000575319$ & $0.9999822$ & $0.000676004$\\
+115 & $0.9999861$ & $0.0004312648$ & $0.99999$ & $0.0005066644$ & $0.9999922$ & $0.0003232857$\\
+118 & $0.9999944$ & $0.0003798382$ & $0.9999956$ & $0.0002423703$ & $0.9999968$ & $0.0002847743$\\
+121 & $0.9999975$ & $0.000181713$ & $0.9999982$ & $0.0002135055$ & $0.9999986$ & $0.0001362365$\\
+124 & $0.999999$ & $0.0001600714$ & $0.9999992$ & $0.0001021401$ & $0.9999994$ & $0.0001200076$\\
+127 & $0.9999996$ & $0.00007657429$ & $0.9999997$ & $0.00008996647$ & $0.9999998$ & $0.00005740427$\\
+130 & $0.9999999$ & $0.0001104681$ & $1$ & $0.0003313966$ & &\\
+\hline
+\multicolumn{7}{@{}l}{$\nu_v$: $b_0=0.00960735979838$}\\
+1 & $0.01332222$ & $0.001656734$ & $0.01703709$ & $0.00542487$ & $0.02178601$ & $0.008072268$\\
+4 & $0.02653494$ & $0.008280399$ & $0.03229758$ & $0.009887851$ & $0.03806023$ & $0.009561701$\\
+7 & $0.04481193$ & $0.01077175$ & $0.05156363$ & $0.01030386$ & $0.05927546$ & $0.01128366$\\
+10 & $0.0669873$ & $0.01079812$ & $0.07562625$ & $0.01163129$ & $0.08426519$ & $0.01116664$\\
+13 & $0.09379426$ & $0.01188784$ & $0.1033233$ & $0.01146128$ & $0.1137017$ & $0.01209265$\\
+16 & $0.1240801$ & $0.01171582$ & $0.1352634$ & $0.01227961$ & $0.1464466$ & $0.0119444$\\
+19 & $0.1583869$ & $0.01244886$ & $0.1703271$ & $0.01216045$ & $0.1829732$ & $0.01261611$\\
+22 & $0.1956193$ & $0.01236727$ & $0.2089171$ & $0.0127843$ & $0.2222149$ & $0.0125745$\\
+25 & $0.2361074$ & $0.01295137$ & $0.25$ & $0.01278215$ & $0.2644278$ & $0.01312539$\\
+28 & $0.2788557$ & $0.01298995$ & $0.293757$ & $0.01330075$ & $0.3086583$ & $0.01319874$\\
+31 & $0.3239693$ & $0.01347729$ & $0.3392803$ & $0.01340707$ & $0.3549354$ & $0.01365223$\\
+34 & $0.3705905$ & $0.01360987$ & $0.3865227$ & $0.01381909$ & $0.4024548$ & $0.01378893$\\
+37 & $0.4185959$ & $0.01398487$ & $0.4347369$ & $0.01401875$ & $0.4510177$ & $0.01417834$\\
+40 & $0.4672984$ & $0.014227$ & $0.4836492$ & $0.01434849$ & $0.5$ & $0.01442008$\\
+43 & $0.5163508$ & $0.01450478$ & $0.5327016$ & $0.01460288$ & $0.5489823$ & $0.01464888$\\
+46 & $0.5652631$ & $0.01477283$ & $0.5814041$ & $0.01478305$ & $0.5975452$ & $0.01493237$\\
+49 & $0.6134773$ & $0.01490385$ & $0.6294095$ & $0.01508317$ & $0.6450646$ & $0.01501368$\\
+52 & $0.6607197$ & $0.01522317$ & $0.6760307$ & $0.01511253$ & $0.6913417$ & $0.01535607$\\
+55 & $0.706243$ & $0.01519763$ & $0.7211443$ & $0.01548108$ & $0.7355722$ & $0.01527532$\\
+58 & $0.75$ & $0.01559771$ & $0.7638926$ & $0.01534276$ & $0.7777851$ & $0.0157047$\\
+61 & $0.7910829$ & $0.01539736$ & $0.8043807$ & $0.01581345$ & $0.8170268$ & $0.01544195$\\
+64 & $0.8296729$ & $0.01591008$ & $0.8416131$ & $0.0154806$ & $0.8535534$ & $0.01600481$\\
+67 & $0.8647366$ & $0.01550264$ & $0.8759199$ & $0.01610211$ & $0.8862983$ & $0.01551437$\\
+70 & $0.8966767$ & $0.01618908$ & $0.9062057$ & $0.01551011$ & $0.9157348$ & $0.01629058$\\
+73 & $0.9243738$ & $0.01549424$ & $0.9330127$ & $0.01638817$ & $0.9407245$ & $0.01545718$\\
+76 & $0.9484364$ & $0.0164881$ & $0.9551881$ & $0.01539698$ & $0.9619398$ & $0.0166144$\\
+79 & $0.9677024$ & $0.01529057$ & $0.9734651$ & $0.01677105$ & $0.978214$ & $0.01512197$\\
+82 & $0.9829629$ & $0.01700337185$ & $0.9864815$ & $0.01400531$ & $0.99$ & $0.01625595$\\
+85 & $0.9901963$ & $0.001030202$ & $0.9903926$ & $0.0009054735$ & $0.9923846$ & $0.01054699$\\
+88 & $0.9943766$ & $0.0121635$ & $0.9950495$ & $0.004740679$ & $0.9957224$ & $0.004823687$\\
+91 & $0.9962801$ & $0.004325506$ & $0.9968377$ & $0.004647527$ & $0.9975297$ & $0.006376076$\\
+94 & $0.9982217$ & $0.007504222$ & $0.9985756$ & $0.004326653$ & $0.9989295$ & $0.005001531$\\
+97 & $0.9989498$ & $0.0003296327$ & $0.9989702$ & $0.0003053404$ & $0.9989851$ & $0.0002277013$\\
+100 & $0.999$ & $0.0002284092$ & $0.9990431$ & $0.000675759$ & $0.9990862$ & $0.0006862373$\\
+103 & $0.9991731$ & $0.001444043$ & $0.9992599$ & $0.001522167$ & $0.9993488$ & $0.001651755$\\
+106 & $0.9994377$ & $0.001779182$ & $0.9994512$ & $0.0002834868$ & $0.9994647$ & $0.0002724926$\\
+109 & $0.9995672$ & $0.002278363$ & $0.9996696$ & $0.002607138$ & $0.9996767$ & $0.0002008494$\\
+112 & $0.9996838$ & $0.0001807361$ & $0.999753$ & $0.002013666$ & $0.9998222$ & $0.002372435$\\
+115 & $0.9998327$ & $0.0004080737$ & $0.9998432$ & $0.0003933854$ & $0.9998716$ & $0.001163099$\\
+118 & $0.9999$ & $0.001312675$ & $0.9999219$ & $0.001131631$ & $0.9999438$ & $0.001333007$\\
+121 & $0.9999515$ & $0.0005297437$ & $0.9999593$ & $0.0005706635$ & $0.9999638$ & $0.0003606381$\\
+124 & $0.9999684$ & $0.0003803018$ & $0.9999753$ & $0.0006366439$ & $0.9999822$ & $0.0007480609$\\
+127 & $0.9999861$ & $0.0004772341$ & $0.99999$ & $0.0005606707$ & $0.9999922$ & $0.0003577452$\\
+130 & $0.9999944$ & $0.0004203256$ & $0.9999956$ & $0.000268205$ & $0.9999968$ & $0.0003151286$\\
+133 & $0.9999975$ & $0.000201082$ & $0.9999982$ & $0.0002362633$ & $0.9999986$ & $0.0001507581$\\
+136 & $0.999999$ & $0.0001771335$ & $0.9999992$ & $0.0001130273$ & $0.9999994$ & $0.0001327994$\\
+139 & $0.9999996$ & $0.00008473636$ & $0.9999997$ & $0.00009955619$ & $0.9999998$ & $0.0000635229$\\
+142 & $0.9999999$ & $0.000122243$ & $1$ & $0.0003667206$ & &\\
+\hline
+\multicolumn{7}{@{}l}{$\nu_z^{\rm int}$: $b_0=28303039933611/17500000000000$}\\
+1 & $1.647939$ & $0.000800039$ & $1.678561$ & $0.001634018$ & $1.709871$ & $0.002195722$\\
+4 & $1.741181$ & $0.002569887$ & $1.773045$ & $0.002941359$ & $1.80491$ & $0.003206511$\\
+7 & $1.837192$ & $0.003492292$ & $1.869474$ & $0.003707447$ & $1.902035$ & $0.003935108$\\
+10 & $1.934597$ & $0.004118914$ & $1.967298$ & $0.00430909$ & $2$ & $0.004469524$\\
+13 & $2.032702$ & $0.00462588$ & $2.065403$ & $0.004777443$ & $2.097965$ & $0.004901502$\\
+16 & $2.130526$ & $0.005045769$ & $2.162808$ & $0.005145023$ & $2.19509$ & $0.005284974$\\
+19 & $2.226955$ & $0.005358049$ & $2.258819$ & $0.005500629$ & $2.290129$ & $0.005547422$\\
+22 & $2.321439$ & $0.005693562$ & $2.352061$ & $0.005716104$ & $2.382683$ & $0.005869112$\\
+25 & $2.412486$ & $0.0058643$ & $2.442289$ & $0.006028879$ & $2.471144$ & $0.00599805$\\
+28 & $2.5$ & $0.00617374$ & $2.527785$ & $0.0061167$ & $2.55557$ & $0.006304648$\\
+31 & $2.582166$ & $0.00622033$ & $2.608761$ & $0.00642816$ & $2.634054$ & $0.006311412$\\
+34 & $2.659346$ & $0.006538253$ & $2.683226$ & $0.006392705$ & $2.707107$ & $0.006640591$\\
+37 & $2.729473$ & $0.006459666$ & $2.75184$ & $0.006737854$ & $2.772597$ & $0.006515946$\\
+40 & $2.793353$ & $0.006824422$ & $2.812411$ & $0.006559483$ & $2.83147$ & $0.006912101$\\
+43 & $2.848748$ & $0.006592625$ & $2.866025$ & $0.006992728$ & $2.881449$ & $0.006611407$\\
+46 & $2.896873$ & $0.007069417$ & $2.910376$ & $0.006615346$ & $2.92388$ & $0.007152991$\\
+49 & $2.935405$ & $0.006594439$ & $2.94693$ & $0.00724478$ & $2.956428$ & $0.006543148$\\
+52 & $2.965926$ & $0.007358282$ & $2.973356$ & $0.00643243$ & $2.980785$ & $0.007538103528$\\
+55 & $2.985393$ & $0.00532701$ & $2.99$ & $0.006421216$ & $2.990722$ & $0.001161462$\\
+58 & $2.991445$ & $0.001127666$ & $2.992911$ & $0.002498185$ & $2.994377$ & $0.002795714$\\
+61 & $2.995607$ & $0.00261479$ & $2.996838$ & $0.003080948$ & $2.997348$ & $0.001436316$\\
+64 & $2.997859$ & $0.001592602$ & $2.9979$ & $0.0001394852$ & $2.99794$ & $0.000132549$\\
+67 & $2.998056$ & $0.0003909291$ & $2.998172$ & $0.0004039291$ & $2.998197$ & $0.00008733582$\\
+70 & $2.998222$ & $0.00008626531$ & $2.998371$ & $0.0005458644$ & $2.99852$ & $0.0005686528$\\
+73 & $2.998725$ & $0.0008328935$ & $2.998929$ & $0.0009109751$ & $2.998965$ & $0.0001665063$\\
+76 & $2.999$ & $0.0001617129$ & $2.99917$ & $0.0008451466$ & $2.999339$ & $0.0009489754$\\
+79 & $2.999388$ & $0.0002982447$ & $2.999438$ & $0.0003002494$ & $2.999561$ & $0.0008270791$\\
+82 & $2.999684$ & $0.0009730542$ & $2.999685$ & $0.00001266974$ & $2.999686$ & $0.000009434384$\\
+85 & $2.999754$ & $0.0006105242$ & $2.999822$ & $0.0007153116$ & $2.999861$ & $0.0004647103$\\
+88 & $2.9999$ & $0.0005473779$ & $2.999909$ & $0.0001464355$ & $2.999919$ & $0.0001487465$\\
+91 & $2.999931$ & $0.0002195401$ & $2.999944$ & $0.000241353$ & $2.999956$ & $0.0002613112$\\
+94 & $2.999968$ & $0.0003071303$ & $2.999975$ & $0.0001959502$ & $2.999982$ & $0.0002302158$\\
+97 & $2.999986$ & $0.0001468951$ & $2.99999$ & $0.0001725934$ & $2.999992$ & $0.0001101306$\\
+100 & $2.999994$ & $0.0001293995$ & $2.999996$ & $0.00008256952$ & $2.999997$ & $0.00009701663$\\
+103 & $2.999998$ & $0.00006190621$ & $2.999999$ & $0.0001191514$ & $3$ & $0.0003570495$\\
+\hline
+\end{longtable}
+\endgroup
+
+\subsection{Poisson measures}
+Table~\ref{tab:reference-poisson} gives $\nu_z^{\rm Poi}$. A row $(c,w)$
+with $\operatorname{Im}c>0$ stands for the two Poisson measures on
+$|q|=r=2/5$ with centres $c$ and $\overline c$, each of mass $w$. The row
+$k=0$, with $c$ real, stands for one Poisson measure. The measures are those
+of the proof of Lemma~\ref{lem:reference-bound}, and their logarithmic
+potential is \eqref{eq:poisson-potential}. This gives $2\cdot83+1=167$
+measures of total mass $329659251979/500000000000$.
+\begingroup\small
+\setlength{\tabcolsep}{3.5pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{@{}rlll@{\hspace{1.5em}}rlll@{}}
+\caption{Poisson centres $c$ and masses $w$: rows $k\ge1$ have $\operatorname{Im}c>0$, in increasing order of $\arg c$, and stand also for $\overline c$; row $k=0$ is the real centre.}\label{tab:reference-poisson}\\
+\hline
+$k$&$\operatorname{Re}c$&$\operatorname{Im}c$&$w$&$k$&$\operatorname{Re}c$&$\operatorname{Im}c$&$w$\\
+\hline
+\endfirsthead
+\hline
+$k$&$\operatorname{Re}c$&$\operatorname{Im}c$&$w$&$k$&$\operatorname{Re}c$&$\operatorname{Im}c$&$w$\\
+\hline
+\endhead
+0 & $-0.394$ & $0$ & $0.006687968$ & 42 & $-0.2046129$ & $0.341376$ & $0.0002611643$\\
+1 & $0.2535036$ & $0.308895$ & $0.0002724889$ & 43 & $-0.2080587$ & $0.3345857$ & $0.004943139$\\
+2 & $0.2370883$ & $0.3196766$ & $0.001734768001$ & 44 & $-0.2188947$ & $0.327599$ & $0.006091431004$\\
+3 & $0.221117$ & $0.3309249$ & $0.003160258$ & 45 & $-0.2294962$ & $0.3202616$ & $0.004978119$\\
+4 & $0.2046129$ & $0.341376$ & $0.002355698$ & 46 & $-0.2370883$ & $0.3196766$ & $0.0003172227$\\
+5 & $0.197$ & $0.341214$ & $0.00203316$ & 47 & $-0.239852$ & $0.3125812$ & $0.004953756$\\
+6 & $0.1876159$ & $0.3510047$ & $0.001945593$ & 48 & $-0.249951$ & $0.3045661$ & $0.006293054005$\\
+7 & $0.1742617$ & $0.3533679$ & $0.00333003$ & 49 & $-0.2597823$ & $0.2962249$ & $0.00498701$\\
+8 & $0.1626066$ & $0.3588803$ & $0.003486625$ & 50 & $-0.2672805$ & $0.2948985$ & $0.0003407953$\\
+9 & $0.152308$ & $0.3677041$ & $0.002375737$ & 51 & $-0.2693354$ & $0.2875664$ & $0.005025951$\\
+10 & $0.1387865$ & $0.3687469$ & $0.003817593$ & 52 & $-0.2786001$ & $0.2786001$ & $0.006379229002$\\
+11 & $0.1266471$ & $0.3730905$ & $0.003942579$ & 53 & $-0.2875664$ & $0.2693354$ & $0.005074617$\\
+12 & $0.1155333$ & $0.3808623$ & $0.002775625$ & 54 & $-0.2948985$ & $0.2672805$ & $0.0003451508$\\
+13 & $0.1019747$ & $0.3805748$ & $0.004181110002$ & 55 & $-0.2962249$ & $0.2597823$ & $0.005068562$\\
+14 & $0.08946805$ & $0.3837075$ & $0.004331115$ & 56 & $-0.3045661$ & $0.249951$ & $0.006456653$\\
+15 & $0.07764595$ & $0.3903525$ & $0.003082157$ & 57 & $-0.3125812$ & $0.239852$ & $0.005132843$\\
+16 & $0.06418082$ & $0.3887375$ & $0.004515421$ & 58 & $-0.3196766$ & $0.2370883$ & $0.0003275158$\\
+17 & $0.05142732$ & $0.3906293$ & $0.004618404$ & 59 & $-0.3202616$ & $0.2294962$ & $0.00520169$\\
+18 & $0.03901082$ & $0.3960835$ & $0.003346546$ & 60 & $-0.327599$ & $0.2188947$ & $0.006408025$\\
+19 & $0.02576883$ & $0.3931564$ & $0.004623723$ & 61 & $-0.3345857$ & $0.2080587$ & $0.005265605$\\
+20 & $0.01289132$ & $0.393789$ & $0.005370324$ & 62 & $-0.341376$ & $0.2046129$ & $0.0002748567$\\
+21 & $0$ & $0.398$ & $0.002954771$ & 63 & $-0.341214$ & $0.197$ & $0.005351403$\\
+22 & $-0.01289132$ & $0.393789$ & $0.00558512$ & 64 & $-0.347477$ & $0.1857303$ & $0.006322745001$\\
+23 & $-0.02576883$ & $0.3931564$ & $0.004147672$ & 65 & $-0.3533679$ & $0.1742617$ & $0.00539497$\\
+24 & $-0.03861875$ & $0.3921028$ & $0.005377501$ & 66 & $-0.3597877$ & $0.1701669$ & $0.0002230895$\\
+25 & $-0.05142732$ & $0.3906293$ & $0.004364202$ & 67 & $-0.3588803$ & $0.1626066$ & $0.005494093$\\
+26 & $-0.05839873$ & $0.3936923$ & $0.0002681214$ & 68 & $-0.3640085$ & $0.1507773$ & $0.006236832$\\
+27 & $-0.06418082$ & $0.3887375$ & $0.004435699$ & 69 & $-0.3687469$ & $0.1387865$ & $0.005515612$\\
+28 & $-0.07686559$ & $0.3864294$ & $0.00549873$ & 70 & $-0.3747345$ & $0.1340822$ & $0.0002252512$\\
+29 & $-0.08946805$ & $0.3837075$ & $0.004569928$ & 71 & $-0.3730905$ & $0.1266471$ & $0.005431967$\\
+30 & $-0.09670611$ & $0.3860724$ & $0.0002359134$ & 72 & $-0.3770345$ & $0.1143722$ & $0.006398725$\\
+31 & $-0.1019747$ & $0.3805748$ & $0.004673523$ & 73 & $-0.3805748$ & $0.1019747$ & $0.005431584$\\
+32 & $-0.1143722$ & $0.3770345$ & $0.005552904$ & 74 & $-0.3860724$ & $0.09670611$ & $0.0002813461$\\
+33 & $-0.1266471$ & $0.3730905$ & $0.004783363$ & 75 & $-0.3837075$ & $0.08946805$ & $0.005361819$\\
+34 & $-0.1340822$ & $0.3747345$ & $0.0001976397$ & 76 & $-0.3864294$ & $0.07686559$ & $0.00656059$\\
+35 & $-0.1387865$ & $0.3687469$ & $0.004891999$ & 77 & $-0.3887375$ & $0.06418082$ & $0.005341411$\\
+36 & $-0.1507773$ & $0.3640085$ & $0.005599664001$ & 78 & $-0.3936923$ & $0.05839873$ & $0.000338135$\\
+37 & $-0.1626066$ & $0.3588803$ & $0.00497547$ & 79 & $-0.3906293$ & $0.05142732$ & $0.005290732$\\
+38 & $-0.1701669$ & $0.3597877$ & $0.0002060286$ & 80 & $-0.3921028$ & $0.03861875$ & $0.00668558776$\\
+39 & $-0.1742617$ & $0.3533679$ & $0.004926876$ & 81 & $-0.3931564$ & $0.02576883$ & $0.005271869$\\
+40 & $-0.1857303$ & $0.347477$ & $0.005847720003$ & 82 & $-0.3975206$ & $0.01952893$ & $0.0003596048$\\
+41 & $-0.197$ & $0.341214$ & $0.004984704$ & 83 & $-0.393789$ & $0.01289132$ & $0.005295008$\\
+\hline
+\end{longtable}
+\endgroup
+
+\subsection{Dyadic subdivision}\label{app:depths}
+The four supports are
+\[
+ s=x,v:\ [\varepsilon_0,1],\qquad s=z:\ [1,3],\qquad
+ s=\circ:\ \{re^{i\pi t}:0\le t\le1\},
+\]
+the last parametrized by $t\in[0,1]$. The \emph{initial pieces} of a support
+are the closed intervals between consecutive points of the following sets,
+in increasing order:
+\begin{itemize}
+\item[$x$:] $\varepsilon_0$, $1$, and the endpoints of the $\nu_x$-chain in
+$(\varepsilon_0,1)$;
+\item[$v$:] $\varepsilon_0$, $1$, $r=2/5$, and the endpoints of the
+$\nu_v$-chain in $(\varepsilon_0,1)$;
+\item[$z$:] $1$, $3$, and the endpoints of the $\nu_z^{\rm int}$-chain in $(1,3)$;
+\item[$\circ$:] $t=k/\Narcs$, $0\le k\le\Narcs$.
+\end{itemize}
+Since the chains start at $0.0842\ldots$, $v_0$ and $1.617\ldots$ and end at
+$1$, $1$ and $3$, and $r$ is not an endpoint of the $\nu_v$-chain, there are
+$132$, $145$, $106$ and $\Narcs$ initial pieces.
+
+\begin{lemma}\label{lem:leaves}
+Let $d_x=9$, $d_v=8$, $d_z=7$, $d_\circ=8$. Bisect every initial piece of the
+support $s$ to depth $d_s$: a piece $[A,B]$ gives the $2^{d_s}$ leaves
+\[
+ [A+(B-A)(j-1)2^{-d_s},\,A+(B-A)j2^{-d_s}],\qquad 1\le j\le2^{d_s},
+\]
+in $q$ on the real supports and in $t$ on the circle. The leaves of each
+support have rational endpoints, disjoint interiors and union equal to the
+support. There are $132\cdot2^9$, $145\cdot2^8$, $106\cdot2^7$ and
+$\Narcs\cdot2^8$ leaves, $\nleaves$ in all (Table~\ref{tab:depths}).
+\end{lemma}
+
+\begin{proof}
+Within a piece the leaves are consecutive and their lengths add up to
+$B-A$. The pieces of a support are consecutive and cover it. The counts are
+products.
+\end{proof}
+
+The leaves are the closed pieces of the proof of
+Lemma~\ref{lem:reference-bound}. On each of them the bound of that proof is
+below the cap, so no piece needs a finer subdivision.
+
+\begin{table}[!ht]
+\centering\small\renewcommand{\arraystretch}{1.14}
+\caption{Uniform bisection depths.}\label{tab:depths}
+\begin{tabular}{@{}lrrr@{}}
+\hline
+support&initial pieces&depth $d_s$&leaves\\
+\hline
+$x$ & $132$ & $9$ & $67584$\\
+$v$ & $145$ & $8$ & $37120$\\
+$z$ real & $106$ & $7$ & $13568$\\
+$\circ$ & $32$ & $8$ & $8192$\\
+total & $415$ & & $126464$\\
+\hline
+\end{tabular}
+\end{table}
+
+\section{Computer checks}\label{app:ver}
+
+The ancillary scripts recheck printed data and run finite tests
+(Table~\ref{tab:checks}). They use exact rational arithmetic and, for the
+analytic bounds, Arb ball arithmetic \cite{Arb} through
+\texttt{python-flint}~0.9.0 under Python~3.12.3.
+
+\begin{center}\small\renewcommand{\arraystretch}{1.12}
+\begin{minipage}{\textwidth}\centering
+\captionof{table}{Computer checks.}\label{tab:checks}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.2\textwidth}>{\raggedright\arraybackslash}p{0.75\textwidth}@{}}
+\hline
+check & statements checked\\\hline
+determinant&the exact seed determinant:
+\eqref{eq:g4-polynomial} and Table~\ref{tab:g4-coefficients}. Finite tests:
+$C_{ij}=3^i$ times the right side of \eqref{eq:laurent-moments} with
+$d=j-i$, for $0\le i\le16$ and $|j-i|\le16$; the four
+determinant evaluations in Lemma~\ref{lem:integral-identity} and their
+product for $m\le3$ and three choices of $(s,k,h)$.\\
+arithmetic&recomputes the arrangement of
+\eqref{eq:subdivision-lines} for $R=\Rseam$ in exact rational arithmetic;
+checks the line families of Table~\ref{tab:line-families}, every row of
+Table~\ref{tab:slabs} (by evaluating $\mathfrak c$ from
+\eqref{eq:residue-sets}--\eqref{eq:residue-rank} at two interior points),
+\eqref{eq:inner-integral}, $A$ in \eqref{eq:tau}, $45/32$ and $-5/48$; rational
+bounds for $\tau$ and $\alpha_0-\tau$; integrality of $K_mG_m$ for small $n$.\\
+analytic&Lemmas~\ref{lem:reference-bound} and~\ref{lem:leaves}: the
+chains, masses, conjugation symmetry and $|c|<r$ of
+Tables~\ref{tab:reference-intervals} and~\ref{tab:reference-poisson};
+Tables~\ref{tab:energy}, \ref{tab:caps} and~\ref{tab:depths},
+\eqref{eq:Q-lower}, \eqref{eq:caps} and $\alpha_0$, with the bound of the
+proof of Lemma~\ref{lem:reference-bound} on each of the $\nleaves$ leaves.\\
+mod $17$&\eqref{eq:g4-mod-matrix}, \eqref{eq:g-mod-17}, and
+\eqref{eq:block-congruence} for $t=1$ at $W=0,1,2$.\\\hline
+\end{tabular}
+\end{minipage}
+\end{center}
+
+\section{Proof of Fact~\ref{fact:energy}}\label{app:energy}
+
+For $t>0$ let $g_t(y)=(\pi t)^{-1}e^{-|y|^2/t}$ on $\mathbb C$, a centred
+Gaussian density. Then $g_s*g_t=g_{s+t}$ and $g_t(-y)=g_t(y)$. For $a,b>0$,
+$\int_0^\infty(e^{-a/t}-e^{-b/t})\,dt/t=\log(b/a)$, and the integrand has
+constant sign. With $a=|y|^2$ and $b=1$ this gives, for $y\ne0$,
+\[
+ -\log|y|=\frac\pi2\int_0^\infty\bigl(g_t(y)-g_t(1)\bigr)\,dt,\qquad
+ \int_0^\infty|g_t(y)-g_t(1)|\,dt=\frac2\pi\bigl|\log|y|\bigr|.
+\]
+The hypothesis of Fact~\ref{fact:energy} makes the diagonal
+$|\sigma|\otimes|\sigma|$-null and, by the second identity,
+$g_t(u-w)-g_t(1)$ integrable for $|\sigma|\otimes|\sigma|\otimes dt$. By
+Fubini's theorem and $\sigma(\mathbb C)=0$ (for each $t>0$, $g_t$ is
+bounded, so $\iint g_t(1)\,d\sigma\,d\sigma=g_t(1)\sigma(\mathbb C)^2=0$),
+\[
+ -\iint\log|u-w|\,d\sigma(u)\,d\sigma(w)
+ =\frac\pi2\int_0^\infty\iint g_t(u-w)\,d\sigma(u)\,d\sigma(w)\,dt.
+\]
+For fixed $t$, $g_t(u-w)=\int g_{t/2}(x-u)g_{t/2}(x-w)\,dx$ ($dx$ the
+Lebesgue measure on $\mathbb C$), and the
+corresponding triple integral against $|\sigma|\otimes|\sigma|$ is at most
+$|\sigma|(\mathbb C)^2/(\pi t)$. So, by Fubini again,
+\[
+ \iint g_t(u-w)\,d\sigma(u)\,d\sigma(w)
+ =\int_{\mathbb C}\Bigl(\int g_{t/2}(x-u)\,d\sigma(u)\Bigr)^2dx\ge0.
+\]
+Hence $\iint\log|u-w|\,d\sigma(u)\,d\sigma(w)\le0$. Compact support is not
+used.
+
+\section*{Use of AI tools}
+
+The author devised the method of proof. Codex (OpenAI, GPT-6.1 Sol) computed the
+reference measure $\nu$ and the other printed data, and wrote the Python
+scripts in \texttt{anc/}. Claude Code (Anthropic,
+Claude Opus 5.5) checked the scripts, the
+data and the tables. The author checked every step
+of the proof, every table and every reference, and takes full responsibility
+for the content of the paper.
+
+\section*{Statements and declarations}
+
+\textbf{Competing interests.} The author has no competing interests.
+
+\textbf{Funding.} No funding was received for this work.
+
+{\rightskip=0pt plus 3em\relax
+\textbf{Data availability.} All data used in the proof are printed in
+Appendices~\ref{app:arithmetic}--\ref{app:reference-data}. The \texttt{anc/}
+attachment holds the scripts of Appendix~\ref{app:ver} and a
+\texttt{README.md}. The entry points are \texttt{check\_determinant.py},
+\texttt{check\_arith.py}, \texttt{check\_analytic.py} and
+\texttt{check\_mod17.py}. The helpers are \texttt{arith.py}, \texttt{caps.py},
+\texttt{combine.py}, \texttt{energy.py}, \texttt{indep\_caps\_params.py},
+\texttt{mod17\_replay.py}, \texttt{parse\_tex.py}, \texttt{refmeasure.py},
+\texttt{tex2refjson.py} and \texttt{tex\_tables.py}. The scripts read the
+tables and constants from the \TeX\ source of this manuscript. The analytic
+replay writes to a temporary directory. The reports in
+\texttt{anc/verification/} record the SHA-256 of the \TeX\ source they
+checked. The file \texttt{anc/SCRIPTS\_SHA256SUMS} lists the SHA-256 of the
+scripts and the \texttt{README.md}. Its own SHA-256 is\par}
+\begin{center}\small
+\texttt{890192149e125730cc0b9b0f85ddd7dab8e9ac391a6d14703849fb74d54f8cd7}.
+\end{center}
+
+\begin{thebibliography}{10}
+
+\bibitem{Baker}
+A.~Baker, \emph{Transcendental Number Theory}, 2nd ed., Cambridge Mathematical
+Library, Cambridge University Press, Cambridge, 1990. MR1074572
+
+\bibitem{CDT}
+F.~Calegari, V.~Dimitrov, and Y.~Tang, \emph{The linear independence of $1$,
+$\zeta(2)$, and $L(2,\chi_{-3})$}, preprint (2024), arXiv:2408.15403v2.
+
+\bibitem{HK}
+G.-N. Han and C.~Krattenthaler, \emph{Rectangular Scott-type permanents},
+S\'eminaire Lotharingien de Combinatoire \textbf{43} (1999), Article B43g,
+25 pp., arXiv:math/0003072. MR1741888
+
+\bibitem{HW}
+G.~H. Hardy and E.~M. Wright, \emph{An Introduction to the Theory of
+Numbers}, 6th ed., revised by D.~R. Heath-Brown and J.~H. Silverman,
+Oxford University Press, Oxford, 2008. MR2445243
+
+\bibitem{Ha}
+M.~Hata, \emph{Rational approximations to the dilogarithm}, Trans. Amer. Math.
+Soc. \textbf{336} (1993), no.~1, 363--387,
+\url{https://doi.org/10.1090/S0002-9947-1993-1147401-5}. MR1147401
+
+\bibitem{Arb}
+F.~Johansson, \emph{Arb: efficient arbitrary-precision midpoint-radius
+interval arithmetic}, IEEE Trans. Comput. \textbf{66} (2017), no.~8,
+1281--1292, \url{https://doi.org/10.1109/TC.2017.2690633}. MR3681746
+
+\bibitem{Krat}
+C.~Krattenthaler, \emph{Advanced determinant calculus: a complement},
+Linear Algebra Appl. \textbf{411} (2005), 68--166,
+\url{https://doi.org/10.1016/j.laa.2005.06.042}. MR2178686
+
+\bibitem{DLMF}
+\emph{NIST Digital Library of Mathematical Functions},
+\url{https://dlmf.nist.gov/}, Release 1.2.8 of 2026-09-15, F.~W.~J. Olver
+et al., eds.
+
+\bibitem{Pr}
+T.~Prellberg, \emph{Three irrationality results for the dilogarithm:
+Rhin--Viola and Viola--Zudilin constructions at $-1/4$, $1/5$, and $-1/3$},
+preprint (2026), arXiv:2609.06895v1.
+
+\bibitem{RV05}
+G.~Rhin and C.~Viola, \emph{The permutation group method for the dilogarithm},
+Ann. Sc. Norm. Super. Pisa Cl. Sci. (5) \textbf{4} (2005), no.~3, 389--437,
+\url{https://doi.org/10.2422/2036-2145.2005.3.02}. MR2185863
+
+\bibitem{RV19}
+G.~Rhin and C.~Viola, \emph{Linear independence of $1$, $\mathrm{Li}_1$ and
+$\mathrm{Li}_2$}, Mosc. J. Comb. Number Theory \textbf{8} (2019), no.~1,
+81--96,
+\url{https://doi.org/10.2140/moscow.2019.8.81}. MR3864310
+
+\bibitem{ST}
+E.~B. Saff and V.~Totik, \emph{Logarithmic Potentials with External Fields},
+Grundlehren der Mathematischen Wissenschaften, vol.~316, 1st ed., Springer, 1997,
+\url{https://doi.org/10.1007/978-3-662-03329-6}. MR1485778
+
+\bibitem{VZ}
+C.~Viola and W.~Zudilin, \emph{Linear independence of dilogarithmic values},
+J. Reine Angew. Math. \textbf{736} (2018), 193--223,
+\url{https://doi.org/10.1515/crelle-2015-0030}; preprint version:
+Max-Planck-Institut f\"ur Mathematik Preprint Series 2014 (26),
+\url{https://archive.mpim-bonn.mpg.de/id/eprint/1914/}. MR3769989
+
+\end{thebibliography}
+
+\end{document}
