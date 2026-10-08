@@ -2,6 +2,8 @@
 
 Ruiyi Zhang
 
+DOI: [10.5281/zenodo.23247755](https://doi.org/10.5281/zenodo.23247755)
+
 The manuscript proves that `Li_2(1/3)` is irrational.
 
 Irrationality of `Li_2(1/s)` was known for integers `s <= -5` and `s >= 6` (Hata; Rhin and
@@ -45,3 +47,19 @@ Python 3 with `python-flint` (Arb) for the analytic check:
     python3 check_mod17.py --tex ../main.tex --output /tmp/mod17.json
     python3 check_arith.py --tex ../main.tex --output /tmp/arithmetic.json
     python3 check_analytic.py --tex ../main.tex --replay --output /tmp/analytic.json
+
+## Citation
+
+Ruiyi Zhang, *Irrationality of the dilogarithm at 1/3*, preprint, Zenodo, 2026. https://doi.org/10.5281/zenodo.23247755
+
+```bibtex
+@misc{zhang2026li2third,
+  author    = {Zhang, Ruiyi},
+  title     = {Irrationality of the dilogarithm at 1/3},
+  year      = {2026},
+  publisher = {Zenodo},
+  note      = {Preprint},
+  doi       = {10.5281/zenodo.23247755},
+  url       = {https://doi.org/10.5281/zenodo.23247755}
+}
+```
