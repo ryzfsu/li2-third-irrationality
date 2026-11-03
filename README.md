@@ -2,7 +2,7 @@
 
 Ruiyi Zhang
 
-DOI: [10.5281/zenodo.23247755](https://doi.org/10.5281/zenodo.23247755)
+DOI: [10.5281/zenodo.23247754](https://doi.org/10.5281/zenodo.23247754)
 
 The manuscript proves that `Li_2(1/3)` is irrational.
 
@@ -50,7 +50,7 @@ Python 3 with `python-flint` (Arb) for the analytic check:
 
 ## Citation
 
-Ruiyi Zhang, *Irrationality of the dilogarithm at 1/3*, preprint, Zenodo, 2026. https://doi.org/10.5281/zenodo.23247755
+Ruiyi Zhang, *Irrationality of the dilogarithm at 1/3*, preprint, Zenodo, 2026. https://doi.org/10.5281/zenodo.23247754
 
 ```bibtex
 @misc{zhang2026li2third,
@@ -59,7 +59,7 @@ Ruiyi Zhang, *Irrationality of the dilogarithm at 1/3*, preprint, Zenodo, 2026. 
   year      = {2026},
   publisher = {Zenodo},
   note      = {Preprint},
-  doi       = {10.5281/zenodo.23247755},
-  url       = {https://doi.org/10.5281/zenodo.23247755}
+  doi       = {10.5281/zenodo.23247754},
+  url       = {https://doi.org/10.5281/zenodo.23247754}
 }
 ```

@@ -5,8 +5,8 @@ authors:
   - family-names: Zhang
     given-names: Ruiyi
     affiliation: Independent Researcher
-doi: 10.5281/zenodo.23247755
-url: "https://doi.org/10.5281/zenodo.23247755"
+doi: 10.5281/zenodo.23247754
+url: "https://doi.org/10.5281/zenodo.23247754"
 date-released: 2026-10-08
 preferred-citation:
   type: article
@@ -18,5 +18,5 @@ preferred-citation:
   year: 2026
   publisher:
     name: Zenodo
-  doi: 10.5281/zenodo.23247755
-  url: "https://doi.org/10.5281/zenodo.23247755"
+  doi: 10.5281/zenodo.23247754
+  url: "https://doi.org/10.5281/zenodo.23247754"
